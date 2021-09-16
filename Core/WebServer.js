@@ -5,9 +5,10 @@ const Request = require('./Request')
 const Response = require('./Response')
 require('dotenv').config()
 const fs = require('fs')
+const User = require('../Models/User')
 
 module.exports = class WebServer{
-    #http = http.createServer((tReq, tRes) => {
+    #http = http.createServer(async (tReq, tRes) => {
         let req = new Request(tReq)
         let res = new Response(tRes)
         if(!path.extname(req.Url.pathname)){
@@ -16,7 +17,28 @@ module.exports = class WebServer{
                 res.End()
             }
             else if(req.Url.pathname == "/verify"){
-                console.log(req.Url.vars)
+                let verifytoken = req.Url.vars.verifytoken
+                let user = await User.Find({
+                    where: {
+                        verifytoken
+                    }
+                })
+                if(user != false){
+                    await User.Update({
+                        set: {
+                            verifytoken: "NULL",
+                            verified: 1
+                        },
+                        where:{
+                            verifytoken
+                        }
+                    })
+                    res.End("Successfully verified your account")
+                }
+                else{
+                    res.Redirect('/')
+                    res.End()
+                }
             }
             else{
                 res.Render(`/views/${req.Url.pathname}`)
