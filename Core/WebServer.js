@@ -12,12 +12,14 @@ module.exports = class WebServer{
         let res = new Response(tRes)
         if(!path.extname(req.Url.pathname)){
             if(req.Url.pathname == "/game"){
-                res.Render('index', {}, 'views/index')
+                res.Render('/views/index', {})
                 res.End()
             }
+            else if(req.Url.pathname == "/verify"){
+                console.log(req.Url.vars)
+            }
             else{
-                let path = `${__dirname}/../public/${req.Url.pathname}.html`
-                res.Render(HTMLLoader.Read(path).html)
+                res.Render(`/views/${req.Url.pathname}`)
                 res.End()
             }
         }
