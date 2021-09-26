@@ -41,7 +41,7 @@ module.exports = class Response{
         else console.error("Please don't provide an extension")
     }
 
-    Cookie(name, value, maxAge = 30 * 24 * 3600){
+    CreateCookie(name, value, maxAge = 30 * 24 * 3600){
         this.#res.writeHead(200, {
             'Set-Cookie': `${name}=${value}; Max-Age=${maxAge}`
         })
@@ -58,7 +58,7 @@ module.exports = class Response{
     }
 
     Error(){
-        this.Render('404')
+        this.Render('/views/404')
         this.End()
     }
 }
