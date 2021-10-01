@@ -83,7 +83,7 @@ module.exports = class WebServer{
             }
         }
         else if(req.Method === "GET" && path.extname(req.Url.pathname)){
-            //Handles files such as js and css
+            //Handles files such as js and css, but also html files with .html on the end
             let filePath = `${__dirname}/../public${req.Url.pathname}`
             if(fs.existsSync(filePath)) {
                 if(path.extname(filePath) == ".js"){
@@ -96,7 +96,7 @@ module.exports = class WebServer{
             else {
                 console.info(filePath)
                 console.info(`${req.Url.pathname} doesn't exist`)
-                res.End()
+                res.Error()
             }
         }
     })

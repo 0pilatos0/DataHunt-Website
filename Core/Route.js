@@ -11,7 +11,7 @@ module.exports = class Route{
      * @param {RequestCallback} callback 
      */
     get(url, callback){
-        
+        global.ws.get(`${this.#route}${url}`, callback)
     }   
 
     /**
@@ -20,6 +20,6 @@ module.exports = class Route{
      * @param {RequestCallback} callback 
      */
     post(url, callback){
-
+        global.ws.post(`${this.#route}${url}`, callback)
     }
 }
