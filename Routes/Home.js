@@ -6,7 +6,5 @@ module.exports = class Home extends Route{
         super('')
 
         this.get('/index', HomeController.HandleHome)
-
-        this.get('/verify', HomeController.HandleVerification)
     }
 }

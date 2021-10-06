@@ -15,7 +15,7 @@ module.exports = class HTMLLoader{
                 html = fs.readFileSync(htmlFilePath).toString()
                 if(html.match(Regex.HTMLVar)){
                     html.match(Regex.HTMLVar).map(v => {
-                        vars[v.replace(Regex.HTMLReplace, '')] = ''
+                        vars[v.replace(/[{}]/g, '')] = ''
                     })
                 }
             }
