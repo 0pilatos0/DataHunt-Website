@@ -1,7 +1,7 @@
-const Controller = require('../Core/Controller')
-const Regex = require('../Core/Regex')
-const Salter = require('../Core/Salter')
-const User = require('../Models/User')
+const Controller = require('../Core/Controller');
+const Regex = require('../Core/Regex');
+const Salter = require('../Core/Salter');
+const User = require('../Models/User');
 
 module.exports = class UserController extends Controller{
     constructor() {
@@ -21,7 +21,7 @@ module.exports = class UserController extends Controller{
             where: {
                 verifytoken
             }
-        })
+        });
         if(user != false){
             await User.Update({
                 set: {
