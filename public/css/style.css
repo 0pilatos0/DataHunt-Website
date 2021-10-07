@@ -1,0 +1,49 @@
+body{
+    background-color: #CCCCCC;
+}
+.resetPasswordForm{
+    width: 100%;
+    max-width: 600px;
+    background-color: #F2F2F2;
+    margin: 0 auto;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 100px;
+}
+.resetPasswordForm h1{
+    color: black;
+    font-weight: 700;
+    font-size: 50px;
+}
+ .resetPasswordForm #email{
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: 2rem;
+}
+
+.resetPasswordForm hr{
+    color: black;
+    height: 3px;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.resetPasswordForm button[type="submit"]{
+    background-color: #7F7F7F;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 1.5rem;
+    border-radius: 5px;
+    margin-top: 10px;
+
+}
+
+.resetPasswordForm input[type="password"]{
+    
+    font-size: 1.25em;
+    border-radius: 0.25rem;
+    text-align: center;
+}
