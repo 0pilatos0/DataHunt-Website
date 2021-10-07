@@ -9,12 +9,12 @@ module.exports = class UserController extends Controller{
     }
 
     static async HandleVerification(req, res){
-        let verifytoken = req.Url.vars.token;
+        let verifytoken = req.Url.vars.token
+        let errors = []
         if(!verifytoken) {
-            res.Redirect('/');
-            res.End();
-            //TODO create error with text "There was no token provided"
-
+            res.Redirect('/')
+            res.End()
+            errors.push("There was no token provided")
             return
         }
         let user = await User.Find({
@@ -25,7 +25,7 @@ module.exports = class UserController extends Controller{
         if(user != false){
             await User.Update({
                 set: {
-                    verifytoken: "NULL",
+                    verifytoken: null,
                     verified: 1
                 },
                 where:{
@@ -37,83 +37,99 @@ module.exports = class UserController extends Controller{
         else{
             res.Redirect('/')
             res.End()
-            //TODO create error with text "User with that verification token couldn't be found"
+            errors.push("User with that verification token couldn't be found")
         }
     }
 
     static async HandlePasswordReset(req, res){
-        res.Render("/views/resetpassword", {
-            email: 'test',
-            resettoken: 'pizza'
+        let errors = []
+        let resettoken = req.Url.vars.token
+        req.session.url = `${req.Url.pathname}${req.Url.search}`
+        req.session.token = resettoken
+        if(!resettoken) {
+            res.Redirect('/')
+            res.End()
+            errors.push("There was no token provided")
+            return
+        }
+        let user = await User.Find({
+            where: {
+                resettoken
+            }
         })
-        // let resettoken = req.Url.vars.token
-        // if(!resettoken) {
-        //     res.Redirect('/')
-        //     res.End()
-        //     //TODO create error with text "There was no token provided"
-        //     return
-        // }
-        // let user = await User.Find({
-        //     where: {
-        //         resettoken
-        //     }
-        // })
-        // if(user != false){
-        //     res.Render("/views/resetpassword", {
-        //         email: user.email,
-        //         resettoken
-        //     }) //page with reset password input and everything
-        // }
-        // else{
-        //     res.Redirect('/')
-        //     res.End()
-        //     //TODO create error with text "User with that resetpassword token couldn't be found"
-        // }
+        if(user != false){
+            res.Render("/views/resetpassword", {
+                email: user.email,
+                resettoken
+            })
+        }
+        else{
+            res.Redirect('/')
+            res.End()
+            errors.push("User with that reset token couldn't be found")
+        }
     }
 
     static async HandlePasswordResetPost(req, res){
+        const passwordMessage = 'must contain 1 uppercase, 1 lowercase, 1 number and 1 special character'
         let errors = []
+        let success = []
         if(req.data.password != ''){
             if(!Regex.Password.test(req.data.password)){
-                errors.push("Password must contain 1 uppercase, 1 lowercase, 1 number and 1 special character")
+                errors.push(`Password ${passwordMessage}`)
             }
         }
         else{
             errors.push("Password must be filled in")
         }
         if(req.data.repeatPassword != ''){
-            if(!Regex.Password.test(req.data.password)){
-                errors.push("Repeat password must contain 1 uppercase, 1 lowercase, 1 number and 1 special character")
+            if(!Regex.Password.test(req.data.repeatPassword)){
+                errors.push(`Repeat password ${passwordMessage}`)
             }
         }
         else{
             errors.push("Repeat password must be filled in")
         }
-        console.log(errors)
-        if(errors.length == 0){
-            if(req.data.password != req.data.repeatPassword){
-                errors.push("Passwords aren't the same")
+        let user = await User.Find({
+            where:{
+                resettoken: req.session.token
             }
-            else{
-                let hashedPassword = Salter.HashPassword(req.data.password)
-                await User.Update({
-                    set:{
-                        resettoken: null,
-                        password: hashedPassword
-                    },
-                    where:{
-                        resettoken: req.data.resettoken
-                    }
-                })
-                //Show the user that the password has changed
-                
-                //Change password data in database
+        })
+        if(user != false){
+            if(Salter.VerifyPassword(req.data.password, user.password)){
+                errors.push("Password can't be the same as your old password")
+                res.Redirect(req.session.url)
+                return
             }
         }
         else{
-            //Send errors back and show them
+            errors.push("User with that reset token couldn't be found")
+            res.Redirect('/')
+            return
         }
-        res.Redirect('/resetpassword')
+        if(req.data.password != req.data.repeatPassword){
+            errors.push("Passwords aren't the same")
+        }
+        if(errors.length == 0){
+            let hashedPassword = Salter.HashPassword(req.data.password)
+            await User.Update({
+                set:{
+                    resettoken: null,
+                    password: hashedPassword
+                },
+                where:{
+                    resettoken: req.session.token
+                }
+            })
+            success.push("Your password has successfully been changed")
+            res.Redirect('/')
+            return
+        }
+        console.log(req.session)
+        console.log(req.params)
         console.log(req.data)
+        res.Redirect(req.session.url)
+        delete req.session.url
+        delete req.session.token
     }
 }
