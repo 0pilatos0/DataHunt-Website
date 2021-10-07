@@ -1,7 +1,7 @@
-const Controller = require('../Core/Controller')
-const Regex = require('../Core/Regex')
-const Salter = require('../Core/Salter')
-const User = require('../Models/User')
+const Controller = require('../Core/Controller');
+const Regex = require('../Core/Regex');
+const Salter = require('../Core/Salter');
+const User = require('../Models/User');
 
 module.exports = class UserController extends Controller{
     constructor() {
@@ -9,18 +9,19 @@ module.exports = class UserController extends Controller{
     }
 
     static async HandleVerification(req, res){
-        let verifytoken = req.Url.vars.token
+        let verifytoken = req.Url.vars.token;
         if(!verifytoken) {
-            res.Redirect('/')
-            res.End()
+            res.Redirect('/');
+            res.End();
             //TODO create error with text "There was no token provided"
+
             return
         }
         let user = await User.Find({
             where: {
                 verifytoken
             }
-        })
+        });
         if(user != false){
             await User.Update({
                 set: {
