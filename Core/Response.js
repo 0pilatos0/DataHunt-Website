@@ -5,13 +5,15 @@ const fs = require('fs')
 
 module.exports = class Response{
     #res
+    #req
 
     /**
      * 
      * @param {http.ServerResponse} res 
      */
-    constructor(res) {
+    constructor(res, req) {
         this.#res = res
+        this.#req = req
     }
 
     Redirect(url){
@@ -35,9 +37,12 @@ module.exports = class Response{
         Object.keys(vars).map(v => {
             htmlPage.vars[v] = vars[v]
         })
+        if(!this.#req.session.feedback) this.#req.session.feedback = []
         htmlPage.html = HTMLLoader.Replace(templatePage.html, {
-            body: htmlPage.html
+            body: htmlPage.html,
+            feedback: this.#req.session.feedback.join()
         })
+        delete this.#req.session.feedback
         if(!path.extname(pageName)) this.Send(HTMLLoader.Replace(htmlPage.html, htmlPage.vars))
         else console.log("Please don't provide an extension")
     }
