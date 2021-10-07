@@ -25,7 +25,7 @@ module.exports = class UserController extends Controller{
         if(user != false){
             await User.Update({
                 set: {
-                    verifytoken: "NULL",
+                    verifytoken: null,
                     verified: 1
                 },
                 where:{
@@ -68,8 +68,6 @@ module.exports = class UserController extends Controller{
             res.End()
             errors.push("User with that reset token couldn't be found")
         }
-        
-        console.log(errors)
     }
 
     static async HandlePasswordResetPost(req, res){
@@ -112,7 +110,6 @@ module.exports = class UserController extends Controller{
         if(req.data.password != req.data.repeatPassword){
             errors.push("Passwords aren't the same")
         }
-        console.log(errors)
         if(errors.length == 0){
             let hashedPassword = Salter.HashPassword(req.data.password)
             await User.Update({
