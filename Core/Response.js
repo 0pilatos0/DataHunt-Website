@@ -35,10 +35,11 @@ module.exports = class Response{
         Object.keys(vars).map(v => {
             htmlPage.vars[v] = vars[v]
         })
-        if(!path.extname(pageName)) this.Send(HTMLLoader.Replace(templatePage.html, {
+        htmlPage.html = HTMLLoader.Replace(templatePage.html, {
             body: htmlPage.html
-        }))
-        else console.error("Please don't provide an extension")
+        })
+        if(!path.extname(pageName)) this.Send(HTMLLoader.Replace(htmlPage.html, htmlPage.vars))
+        else console.log("Please don't provide an extension")
     }
 
     CreateCookie(name, value, maxAge = 30 * 24 * 3600){
