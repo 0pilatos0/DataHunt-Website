@@ -15,7 +15,7 @@ module.exports = class WebServer{
     #sessions = []
     #http = http.createServer(async (tReq, tRes) => {
         let req = new Request(tReq)
-        let res = new Response(tRes)
+        let res = new Response(tRes, req)
         if(!path.extname(req.Url.pathname)){
             //#region session logic
             let sessionID = req.Cookies[Object.keys(req.Cookies).find(c => {
