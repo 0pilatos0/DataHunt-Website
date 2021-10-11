@@ -23,5 +23,6 @@ module.exports = class HomeController extends Controller{
             delete req.session.errors
         }
         res.Render("/views/index");
+
     }
 };
