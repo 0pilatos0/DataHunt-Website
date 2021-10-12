@@ -12,6 +12,15 @@ module.exports = class Salter {
         return bcrypt.hashSync(Math.floor(Math.random() * 1000000).toString(), 12)
     }
 
+    static GenerateID(){
+        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split("");
+        let string = "";
+        for (let i = 0; i < 16; i++) {
+            string += chars[Math.floor(Math.random() * chars.length)]
+        }
+        return string;
+    }
+
     /**
      Hashes the password from string and returns hashedpassword as string
      @param {String} password

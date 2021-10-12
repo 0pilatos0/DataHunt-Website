@@ -2,6 +2,8 @@ const http = require('http')
 const HTMLLoader = require('../Loaders/HtmlLoader')
 const path = require('path')
 const fs = require('fs')
+const Feedback = require('../Core/Feedback/Feedback');
+const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
 
 module.exports = class Response{
     #res
@@ -40,7 +42,7 @@ module.exports = class Response{
         if(!this.#req.session.feedback) this.#req.session.feedback = []
         htmlPage.html = HTMLLoader.Replace(templatePage.html, {
             body: htmlPage.html,
-            feedback: this.#req.session.feedback.join()
+            feedback: this.#req.session.feedback.join("")
         })
         delete this.#req.session.feedback
         if(!path.extname(pageName)) this.Send(HTMLLoader.Replace(htmlPage.html, htmlPage.vars))
