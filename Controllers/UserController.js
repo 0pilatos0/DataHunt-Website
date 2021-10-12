@@ -53,8 +53,21 @@ module.exports = class UserController extends Controller{
         req.session.url = `${req.Url.pathname}${req.Url.search}`
         req.session.token = resettoken
         req.session.feedback = []
+
+        let handleErrors = () => {
+            errors.map(error => {
+                req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, error))
+            })
+            delete req.session.errors
+            if(errors.length > 0){
+                res.Redirect('/')
+            }
+        }
+
         if(!resettoken) {
             errors.push("There was no token provided")
+            handleErrors()
+            return
         }
         let user = await User.Find({
             where: {
@@ -76,13 +89,7 @@ module.exports = class UserController extends Controller{
         else{
             errors.push(`User with reset token '${resettoken}' couldn't be found`)
         }
-        errors.map(error => {
-            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, error))
-        })
-        delete req.session.errors
-        if(errors.length > 0){
-            res.Redirect('/')
-        }
+        handleErrors()
     }
 
     static async HandlePasswordResetPost(req, res){
