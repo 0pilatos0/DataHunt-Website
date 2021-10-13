@@ -20,7 +20,7 @@ module.exports = class Response{
 
     Redirect(url){
         this.#res.writeHead(302, {
-            Location: `http://${process.env.HOST}:${process.env.PORT}${url}`
+            Location: `http://${process.env.HOST}${process.env.PORT != 80 || process.env.PORT != 8080 ? `:${process.env.PORT}` : ""}${url}`
         })
     }
 
