@@ -34,8 +34,8 @@ module.exports = class Response{
     }
 
     Render(pageName, vars = {}){
-        let templatePage = HTMLLoader.Read(`${__dirname}/../public/views/template.html`)
-        let htmlPage = HTMLLoader.Read(`${__dirname}/../public${pageName}.html`)
+        let templatePage = HTMLLoader.Read(`${__dirname}/../Public/views/template.html`)
+        let htmlPage = HTMLLoader.Read(`${__dirname}/../Public${pageName}.html`)
         Object.keys(vars).map(v => {
             htmlPage.vars[v] = vars[v]
         })
