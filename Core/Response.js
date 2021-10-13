@@ -1,5 +1,5 @@
 const http = require('http')
-const HTMLLoader = require('../Loaders/HtmlLoader')
+const HTMLLoader = require('../Loaders/HTMLLoader')
 const path = require('path')
 const fs = require('fs')
 const Feedback = require('../Core/Feedback/Feedback');
