@@ -6,6 +6,6 @@ module.exports = class GameController extends Controller{
     }
 
     static async HandleGame(req, res){
-        res.Render("/views/index");
+        res.Render(`${__dirname}/../../../../../game-runner/_work/DataHunt-Game/DataHunt-Game/index`);
     }
 };
