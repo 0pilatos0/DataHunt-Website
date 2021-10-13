@@ -1,6 +1,5 @@
 const http = require('http')
 const path = require('path')
-const HTMLLoader = require('../Loaders/HtmlLoader')
 const Request = require('./Request')
 const Response = require('./Response')
 require('dotenv').config()
