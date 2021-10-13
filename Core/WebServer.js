@@ -93,7 +93,7 @@ module.exports = class WebServer{
                 res.End(fs.readFileSync(filePath))
             }
             else {
-                filePath = `${__dirname}/../../../../game-runner/_work/DataHunt-Game/DataHunt-Game/${req.Url.pathname}`
+                filePath = `${__dirname}/../../../../game-runner/_work/DataHunt-Game/DataHunt-Game${req.Url.pathname}`
                 if(fs.existsSync(filePath)) {
                     if(path.extname(filePath) == ".js"){
                         tRes.writeHead(200, {
