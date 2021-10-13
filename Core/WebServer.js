@@ -93,9 +93,20 @@ module.exports = class WebServer{
                 res.End(fs.readFileSync(filePath))
             }
             else {
-                console.info(filePath)
-                console.info(`${req.Url.pathname} doesn't exist`)
-                res.Error()
+                filePath = `${__dirname}/../../../../game-runner/_work/DataHunt-Game/DataHunt-Game/${req.Url.pathname}`
+                if(fs.existsSync(filePath)) {
+                    if(path.extname(filePath) == ".js"){
+                        tRes.writeHead(200, {
+                            'Content-Type': 'text/javascript'
+                        })
+                    }
+                    res.End(fs.readFileSync(filePath))
+                }
+                else{
+                    console.info(filePath)
+                    console.info(`${req.Url.pathname} doesn't exist`)
+                    res.Error()
+                }
             }
         }
     })
