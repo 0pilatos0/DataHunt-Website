@@ -8,6 +8,12 @@ const User = require('../Models/User')
 const Helper = require('./Helper')
 const qs = require('querystring')
 
+/**
+ * @callback RequestCallback
+ * @param {Request} req
+ * @param {Response} res
+ */
+
 module.exports = class WebServer{
     #posts = []
     #gets = []
@@ -33,6 +39,7 @@ module.exports = class WebServer{
                 req.session = this.#sessions[sessionID] 
             }
             //#endregion
+            if(!req.session.feedback) req.session.feedback = []
             if(req.Method == "GET"){
                 let callbacks = getCallbacks(this.#gets, req)
                 if(typeof callbacks != "undefined"){
@@ -82,29 +89,28 @@ module.exports = class WebServer{
             }
         }
         else if(req.Method === "GET" && path.extname(req.Url.pathname)){
-            //Handles files such as js and css, but also html files with .html on the end
-            let filePath = `${__dirname}/../Public${req.Url.pathname}`
-            if(fs.existsSync(filePath)) {
+            let setTypeToJSFile = () => {
                 if(path.extname(filePath) == ".js"){
                     tRes.writeHead(200, {
                         'Content-Type': 'text/javascript'
                     })
                 }
+            }
+            //Handles files such as js and css, but also html files with .html on the end
+            let filePath = `${__dirname}/../Public${req.Url.pathname}`
+            if(fs.existsSync(filePath)) {
+                setTypeToJSFile()
                 res.End(fs.readFileSync(filePath))
             }
             else {
+                //console.info(filePath)
+                console.info(`${req.Url.pathname} doesn't exist`)
                 filePath = `${__dirname}/../../../../../game-runner/_work/DataHunt-Game/DataHunt-Game${req.Url.pathname}`
                 if(fs.existsSync(filePath)) {
-                    if(path.extname(filePath) == ".js"){
-                        tRes.writeHead(200, {
-                            'Content-Type': 'text/javascript'
-                        })
-                    }
+                    setTypeToJSFile()
                     res.End(fs.readFileSync(filePath))
                 }
                 else{
-                    console.info(filePath)
-                    console.info(`${req.Url.pathname} doesn't exist`)
                     res.Error()
                 }
             }
@@ -116,14 +122,6 @@ module.exports = class WebServer{
             console.log(`WebServer is running on http://${process.env.HOST}:${process.env.PORT}`)
         })
     }
-
-    /**
-     * This callback type is called `requestCallback` and is displayed as a global symbol.
-     *
-     * @callback RequestCallback
-     * @param {Request} req
-     * @param {Response} res
-     */
 
     /**
      * 

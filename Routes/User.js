@@ -5,10 +5,10 @@ module.exports = class User extends Route{
     constructor() {
         super('')
 
-        this.get('/verify', UserController.HandleVerification)
+        this.get('/profile', UserController.HandleProfile)
 
-        this.get('/resetpassword', UserController.HandlePasswordReset)
+        this.post('/profilePicture', UserController.HandleProfilePicturePost)
 
-        this.post('/resetpassword', UserController.HandlePasswordResetPost)
+        this.post('/changeAccount', UserController.HandleChangeAccountPost)
     }
 }

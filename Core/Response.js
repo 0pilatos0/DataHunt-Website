@@ -4,6 +4,7 @@ const path = require('path')
 const fs = require('fs')
 const Feedback = require('../Core/Feedback/Feedback');
 const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
+const Utils = require('./Utils');
 
 module.exports = class Response{
     #res
@@ -20,7 +21,7 @@ module.exports = class Response{
 
     Redirect(url){
         this.#res.writeHead(302, {
-            Location: `http://${process.env.HOST}${process.env.PORT != 80 && process.env.PORT != 8080 ? `:${process.env.PORT}` : ""}${url}`
+            Location: `${Utils.URL}${url}`
         })
     }
 
@@ -39,10 +40,16 @@ module.exports = class Response{
         Object.keys(vars).map(v => {
             htmlPage.vars[v] = vars[v]
         })
-        if(!this.#req.session.feedback) this.#req.session.feedback = []
         htmlPage.html = HTMLLoader.Replace(templatePage.html, {
             body: htmlPage.html,
-            feedback: this.#req.session.feedback.join("")
+            feedback: this.#req.session.feedback?.join(""),
+            code: `
+                <script>
+                    ${this.#req.session.user ? "" : `document.getElementById("profile").style.display = "none"`}
+                    ${this.#req.session.user ? "" : `document.getElementById("logout").style.display = "none"`}
+                    ${this.#req.session.user ? `document.getElementById("login").style.display = "none"` : ""}
+                </script>
+            `
         })
         delete this.#req.session.feedback
         if(!path.extname(pageName)) this.Send(HTMLLoader.Replace(htmlPage.html, htmlPage.vars))

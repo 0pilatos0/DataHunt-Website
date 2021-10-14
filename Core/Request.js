@@ -3,6 +3,7 @@ const http = require('http')
 module.exports = class Request{
     #req
     session = {}
+    data = {}
 
     /**
      * 

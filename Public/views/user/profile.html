@@ -1,0 +1,104 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js" integrity="sha512-ooSWpxJsiXe6t4+PPjCgYmVfr1NS5QXJACcR/FPpsdm6kqG1FmQ2SVyg2RXeVuCRBLr0lWHnWJP6Zs1Efvxzww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" integrity="sha512-0SPWAwpC/17yYyZ/4HSllgaK7/gg9OlVozq8K7rf3J8LvCjYEEIfzzpnA2/SSjpGIunCSD18r3UhvDcu/xncWA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<div style="display: grid; position: relative; width: 100vw; grid-template-columns: 2;">
+    <div id="currentProfilePicture">
+        <div>
+            <h1>Current profile picture:</h1>
+        </div>
+        <div>
+            <img src="{{profilePicture}}" style="width: 50%; image-rendering: pixelated;">
+        </div>
+    </div>
+    <div>
+        <div>
+            <h1>{{action}} profile picture:</h1>
+        </div>
+        <form id="profilePictureForm" action="/profilePicture" method="POST">
+            <div>
+                <label for="name">Picture:</label>
+                <input id="pictureInput" type="file" accept="image/jpeg, image/png">
+                <input id="picture" type="hidden" name="picture">
+            </div>
+            <div>
+                <div id="pictureOutputHolder"></div>
+            </div>
+            <div>
+                <button style="display: none" id="pictureSubmit" type="submit">{{action}} picture</button>
+            </div>
+        </form>
+    </div>
+    <div style="position: absolute; right: 0;">
+        <div>
+            <h1>Change account:</h1>
+        </div>
+        <form action="/changeAccount" method="POST">
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" name="name" value="{{name}}">
+            </div>
+            <div>
+                <label for="name">Username:</label>
+                <input type="text" name="username" value="{{username}}">
+            </div>
+            <div>
+                <label for="name">Email:</label>
+                <input type="text" name="email" value="{{email}}">
+            </div>
+            <div>
+                <label for="name">Old password:</label>
+                <input type="password" name="oldPassword">
+            </div>
+            <div>
+                <label for="name">New password:</label>
+                <input type="password" name="password">
+            </div>
+            <div>
+                <label for="name">Repeat new password:</label>
+                <input type="password" name="repeatPassword">
+            </div>
+            <div>
+                <button type="submit">Save changes</button>
+                <button>Delete account</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    let cropper 
+
+    pictureInput.onchange= function(e){
+        let pictureOutput = document.createElement('img')
+        pictureOutput.style.display = "block";
+        pictureOutput.id = "pictureOutput"
+        pictureOutput.src = URL.createObjectURL(e.target.files[0]);
+        pictureOutputHolder.innerHTML = ""
+        pictureOutputHolder.appendChild(pictureOutput)
+        pictureSubmit.style.display = "block"
+        reCreateCropper()
+    }
+
+    pictureSubmit.onclick = (e) => {
+        e.preventDefault()
+        picture.value = cropper.getCroppedCanvas().toDataURL("image/png")
+        profilePictureForm.submit()
+    }
+
+    function reCreateCropper(){
+        cropper = new Cropper(pictureOutput, {
+            aspectRatio: 1 / 1
+        })
+    }
+</script>
+
+<style>
+    .cropper-view-box {
+        border-radius: 50%;
+    }
+    .cropper-face {
+        background-color:inherit !important;
+    }
+</style>
+
+{{script}}

@@ -28,9 +28,15 @@ module.exports = class HTMLLoader{
         }
     }
 
+    /**
+     * 
+     * @param {String} html 
+     * @param {Object} vars 
+     * @returns 
+     */
     static Replace(html, vars){
         Object.keys(vars).map(v => {
-            html = html.replace(`{{${v}}}`, vars[v])
+            html = html.replaceAll(`{{${v}}}`, vars[v])
         })
         return html
     }
