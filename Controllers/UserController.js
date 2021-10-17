@@ -21,7 +21,7 @@ module.exports = class UserController extends Controller{
      */
     static async HandleProfile(req, res){
         if(!req.session.user){
-            return res.Redirect('/login')
+            return res.Redirect('/login?url=/profile')
         }
         let profilePicture = await ProfilePicture.Find({
             where: {
@@ -50,7 +50,7 @@ module.exports = class UserController extends Controller{
      */
     static async HandleProfilePicturePost(req, res){
         if(!req.session.user){
-            return res.Redirect('/login')
+            return res.Redirect('/login?url=/profile')
         }
         let profilePictureID = await ProfilePicture.FindId({
             where: {

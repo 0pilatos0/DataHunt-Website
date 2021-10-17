@@ -9,6 +9,7 @@ const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
 const Mailer = require('../Core/Mailer');
 const HTMLLoader = require('../Loaders/HTMLLoader');
 const Utils = require('../Core/Utils');
+const Role = require('../Models/Role')
 
 module.exports = class AccountController extends Controller{
     constructor() {
@@ -203,15 +204,34 @@ module.exports = class AccountController extends Controller{
         else{
             errors.push("Your username or password is incorrect")
         }
+        let roles = await Role.Select({
+            where: {
+                user_id: user.id
+            },
+            joins: [
+                "INNER JOIN roles ON users_roles.role_id = roles.id"
+            ],
+            select: ["name"]
+        })
+        let parsedRoles = []
+        roles.map(role => {
+            parsedRoles.push(role.name)
+        })
         if(errors.length == 0){
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully logged in`))
             req.session.user = {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                name: user.name
+                name: user.name,
+                roles: parsedRoles
             }
-            res.Redirect('/')
+            if(req.Url.vars?.url){
+                res.Redirect(req.Url.vars.url)
+            }
+            else{
+                res.Redirect('/')
+            }
         } 
         else{
             return errorFeedback()
@@ -292,7 +312,7 @@ module.exports = class AccountController extends Controller{
             }
         })
         if(user != false){
-            res.Render("/views/resetpassword", {
+            res.Render("/views/account/resetpassword", {
                 email: user.email,
                 resettoken
             })

@@ -40,6 +40,21 @@ module.exports = class WebServer{
             }
             //#endregion
             if(!req.session.feedback) req.session.feedback = []
+            if(req.session.user){
+                let user = await User.Find({
+                    where:{
+                        username: req.session.user.username
+                    }
+                })
+                if(user == false){
+                    delete req.session.user
+                }
+                else{
+                    if(!user.verified || !user.enabled){
+                        delete req.session.user
+                    }
+                }
+            }
             if(req.Method == "GET"){
                 let callbacks = getCallbacks(this.#gets, req)
                 if(typeof callbacks != "undefined"){

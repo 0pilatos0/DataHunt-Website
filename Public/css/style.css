@@ -125,3 +125,7 @@ body{
 #navbar #profile{
     right: 150px;
 }
+
+#navbar #admin{
+    right: 200px;
+}
