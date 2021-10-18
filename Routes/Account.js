@@ -1,9 +1,11 @@
 const AccountController = require("../Controllers/AccountController");
-const Route = require("../Core/Route");
+const Router = require("../Core/Router");
 
-module.exports = class Account extends Route{
+module.exports = class Account extends Router{
     constructor() {
         super('')
+
+        this.use(Account.NotAuthenticated)
 
         this.get('/login', AccountController.HandleLogin)
 
@@ -18,7 +20,21 @@ module.exports = class Account extends Route{
         this.get('/resetpassword', AccountController.HandlePasswordReset)
 
         this.post('/resetpassword', AccountController.HandlePasswordResetPost)
+    }
 
-        this.get('/logout', AccountController.HandleLogout)
+    static async Authenticated(req, res, next){
+        if(!req.session.user){
+            res.Redirect(`/login?url=${req.Url.pathname}`)
+            return res.End()
+        }
+        next()
+    }
+
+    static async NotAuthenticated(req, res, next){
+        if(req.session.user){
+            res.Redirect(`/`)
+            return res.End()
+        }
+        next()
     }
 }

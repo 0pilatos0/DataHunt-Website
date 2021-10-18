@@ -16,9 +16,10 @@ module.exports = class HomeController extends Controller{
      * @param {Response} res 
      * @returns 
      */
-    static async HandleHome(req, res){
+    static async HandleHome(req, res, next){
         res.Render("/views/index", {
             username: req.session.user?.username ? `, ${req.session.user?.username}` : "",
         });
+        next()
     }
 };

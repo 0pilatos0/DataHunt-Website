@@ -7,20 +7,30 @@ const fs = require('fs')
 const User = require('../Models/User')
 const Helper = require('./Helper')
 const qs = require('querystring')
+const Router = require('./Router')
+const Role = require('../Models/Role')
 
 /**
  * @callback RequestCallback
  * @param {Request} req
  * @param {Response} res
+ * @param {Function} next
  */
 
 module.exports = class WebServer{
-    #posts = []
-    #gets = []
-    #sessions = []
+    #posts = {}
+    #gets = {}
+    #sessions = {}
     #http = http.createServer(async (tReq, tRes) => {
         let req = new Request(tReq)
         let res = new Response(tRes, req)
+        let saveSession = () => {
+            if(!path.extname(req.Url.pathname)){
+                this.#sessions[req.Cookies[process.env.SESSIONCOOKIENAME]] = req.session
+            }
+        }
+        req.On('end', saveSession)
+        req.On('close', saveSession)
         if(!path.extname(req.Url.pathname)){
             //#region session logic
             let sessionID = req.Cookies[Object.keys(req.Cookies).find(c => {
@@ -54,26 +64,42 @@ module.exports = class WebServer{
                         delete req.session.user
                     }
                 }
+                let roles = await Role.Select({
+                    where: {
+                        user_id: req.session.user.id
+                    },
+                    joins: [
+                        "INNER JOIN roles ON users_roles.role_id = roles.id"
+                    ],
+                    select: ["name"]
+                })
+                let parsedRoles = []
+                roles.map(role => {
+                    parsedRoles.push(role.name)
+                })
+                req.session.user.roles = parsedRoles
             }
             if(req.Method == "GET"){
-                let callbacks = getCallbacks(this.#gets, req)
-                if(typeof callbacks != "undefined"){
-                    let doneCallbacks = 0
-                    callbacks.map(async callback => {
-                        await callback(req, res)
-                        doneCallbacks++
-                        if(doneCallbacks == callbacks.length){
-                            this.#sessions[req.Cookies[process.env.SESSIONCOOKIENAME]] = req.session
+                let handlers = getHandlers(this.#gets, req, res)
+                if(handlers.length > 0){
+                    let doneHandlers = 0
+                    let next = async () => {
+                        doneHandlers++
+                        if(doneHandlers == handlers.length){
                             res.End()
                         }
-                    })
+                        else{
+                            await handlers[doneHandlers](req, res, next)
+                        }
+                    }
+                    await handlers[0](req, res, next)
                 }
                 else{
                     res.Error()
                 }
             }
             else if(req.Method == "POST"){
-                let callbacks = getCallbacks(this.#posts, req)
+                let handlers = getHandlers(this.#posts, req, res)
                 let body = ''
                 tReq.on('data', (data) => {
                     body += data
@@ -81,18 +107,20 @@ module.exports = class WebServer{
                 tReq.on('end', async () => {
                     req.data = qs.parse(body)
                     req.data.has = (name) => {
-                        return Object.keyys(req.data).includes(name)
+                        return Object.keys(req.data).includes(name)
                     }
-                    if(typeof callbacks != "undefined"){
-                        let doneCallbacks = 0
-                        callbacks.map(async callback => {
-                            await callback(req, res)
-                            doneCallbacks++
-                            if(doneCallbacks == callbacks.length){
-                                this.#sessions[req.Cookies[process.env.SESSIONCOOKIENAME]] = req.session
+                    if(handlers.length > 0){
+                        let doneHandlers = 0
+                        let next = async () => {
+                            doneHandlers++
+                            if(doneHandlers == handlers.length){
                                 res.End(JSON.stringify(req.data))
                             }
-                        })
+                            else{
+                                await handlers[doneHandlers](req, res, next)
+                            }
+                        }
+                        await handlers[0](req, res, next)
                     }
                     else{
                         res.Error()
@@ -145,9 +173,12 @@ module.exports = class WebServer{
      */
     get(url, callback){
         if(!this.#gets[url]){
-            this.#gets[url] = []
+            this.#gets[url] = {
+                callbacks: [],
+                router: null
+            }
         }
-        this.#gets[url].push(callback)
+        this.#gets[url].callbacks.push(callback)
     }
 
     /**
@@ -157,18 +188,31 @@ module.exports = class WebServer{
      */
     post(url, callback){
         if(!this.#posts[url]){
-            this.#posts[url] = []
+            this.#posts[url] = {
+                callbacks: [],
+                router: null
+            }
         }
-        this.#posts[url].push(callback)
+        this.#posts[url].callbacks.push(callback)
+    }
+
+    /**
+     * 
+     * @param {Router} router
+     */
+    use(router){
+        Object.assign(this.#gets, router.gets)
+        Object.assign(this.#posts, router.posts)
     }
 }
 
 
-function getCallbacks(responses, req){
+function getHandlers(responses, req, res){
     let splittedUrl = req.Url.pathname.substr(1, req.Url.pathname.length).split('/')
     req.params = []
-    return responses[Object.keys(responses).find(get => {
-        let splittedRequestUrl = get.substr(1, get.length).split('/')
+    let handlers = []
+    responses[Object.keys(responses).find(response => {
+        let splittedRequestUrl = response.substr(1, response.length).split('/')
         let index = 0
         let correct = splittedRequestUrl.every(piece => {
             if(piece.indexOf(':') == 0){
@@ -180,6 +224,14 @@ function getCallbacks(responses, req){
                 return true
             }
         })
-        if(splittedRequestUrl.length == splittedUrl.length && correct) return get
-    })]
+        if(splittedRequestUrl.length == splittedUrl.length && correct){
+            responses[response].router.middlewares.map(middleware => {
+                handlers.push(middleware)
+            })
+            return response
+        } 
+    })]?.callbacks.map(callback => {
+        handlers.push(callback)
+    })
+    return handlers
 }

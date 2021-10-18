@@ -45,4 +45,8 @@ module.exports = class Request{
         })
         return parsedCookies
     }
+
+    On(event, callback){
+        this.#req.on(event, callback)
+    }
 }

@@ -19,10 +19,7 @@ module.exports = class UserController extends Controller{
      * @param {Response} res 
      * @returns 
      */
-    static async HandleProfile(req, res){
-        if(!req.session.user){
-            return res.Redirect('/login?url=/profile')
-        }
+    static async HandleProfile(req, res, next){
         let profilePicture = await ProfilePicture.Find({
             where: {
                 user_id: req.session.user.id
@@ -40,6 +37,7 @@ module.exports = class UserController extends Controller{
             `,
             profilePicture: profilePicture?.image || ""
         })
+        next()
     }
 
     /**
@@ -48,10 +46,7 @@ module.exports = class UserController extends Controller{
      * @param {Response} res 
      * @returns 
      */
-    static async HandleProfilePicturePost(req, res){
-        if(!req.session.user){
-            return res.Redirect('/login?url=/profile')
-        }
+    static async HandleProfilePicturePost(req, res, next){
         let profilePictureID = await ProfilePicture.FindId({
             where: {
                 user_id: req.session.user.id
@@ -78,6 +73,7 @@ module.exports = class UserController extends Controller{
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully changed your profile picture`))
         }
         res.Redirect('/profile')
+        next()
     }
 
     /**
@@ -86,7 +82,8 @@ module.exports = class UserController extends Controller{
      * @param {Response} res 
      * @returns 
      */
-    static async HandleChangeAccountPost(req, res){
+    static async HandleChangeAccountPost(req, res, next){
         console.log(req.data)
+        next()
     }
 }

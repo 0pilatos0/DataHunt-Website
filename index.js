@@ -6,10 +6,9 @@ const Account = require("./Routes/Account");
 const Admin = require("./Routes/Admin");
 
 let ws = new WebServer()
-global.ws = ws
 
-new Home()
-new User()
-new Game()
-new Account()
-new Admin()
+ws.use(new Home())
+ws.use(new User())
+ws.use(new Game())
+ws.use(new Account())
+ws.use(new Admin())

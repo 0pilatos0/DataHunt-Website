@@ -9,7 +9,8 @@ const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
 const Mailer = require('../Core/Mailer');
 const HTMLLoader = require('../Loaders/HTMLLoader');
 const Utils = require('../Core/Utils');
-const Role = require('../Models/Role')
+const Role = require('../Models/Role');
+const Account = require('../Routes/Account');
 
 module.exports = class AccountController extends Controller{
     constructor() {
@@ -22,14 +23,12 @@ module.exports = class AccountController extends Controller{
      * @param {Response} res 
      * @returns 
      */
-    static async HandleLogin(req, res){
-        if(req.session.user){
-            return res.Redirect('/')
-        }
+    static async HandleLogin(req, res, next){
         res.Render("/views/account/login", {
             email: req.session.email || ""
         })
         delete req.session.email
+        next()
     }
 
     /**
@@ -38,10 +37,7 @@ module.exports = class AccountController extends Controller{
      * @param {Response} res 
      * @returns 
      */
-    static async HandleRegister(req, res){
-        if(req.session.user){
-            return res.Redirect('/')
-        }
+    static async HandleRegister(req, res, next){
         res.Render("/views/account/register", {
             name: req.session.name || "",
             username: req.session.username || "",
@@ -50,6 +46,7 @@ module.exports = class AccountController extends Controller{
         delete req.session.name
         delete req.session.username
         delete req.session.email
+        next()
     }
 
     /**
@@ -58,11 +55,7 @@ module.exports = class AccountController extends Controller{
      * @param {Response} res 
      * @returns 
      */
-    static async HandleRegisterPost(req, res){
-        if(req.session.user){
-            res.Redirect('/')
-            return
-        }
+    static async HandleRegisterPost(req, res, next){
         let errors = []
         let verificationToken = Salter.GenerateRandomToken()
         let errorFeedback = () => {
@@ -73,6 +66,7 @@ module.exports = class AccountController extends Controller{
                 req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, error))
             })
             res.Redirect('/register')
+            next()
         }
         if(req.data.name != ""){
             if(!req.data.name.match(Regex.Name)){
@@ -122,7 +116,6 @@ module.exports = class AccountController extends Controller{
         })
         if(userId){
             errors.push(`User with username ${req.data.username} already exists`)
-            console.log(errors)
             return errorFeedback()
         }
         userId = await User.FindId({
@@ -132,7 +125,6 @@ module.exports = class AccountController extends Controller{
         })
         if(userId){
             errors.push(`User with email ${req.data.email} already exists`)
-            console.log(errors)
             return errorFeedback()
         }
         await User.Create({
@@ -156,6 +148,7 @@ module.exports = class AccountController extends Controller{
         })
         req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You now received an email with a verification link to verify your account`))
         res.Redirect('/login')
+        next()
     }
 
     /**
@@ -164,11 +157,7 @@ module.exports = class AccountController extends Controller{
      * @param {Response} res 
      * @returns 
      */
-    static async HandleLoginPost(req, res){
-        if(req.session.user){
-            res.Redirect('/')
-            return
-        }
+    static async HandleLoginPost(req, res, next){
         let errors = []
         let errorFeedback = () => {
             req.session.email = req.data.email
@@ -234,8 +223,9 @@ module.exports = class AccountController extends Controller{
             }
         } 
         else{
-            return errorFeedback()
+            errorFeedback()
         }
+        next()
     }
 
     /**
@@ -244,7 +234,7 @@ module.exports = class AccountController extends Controller{
      * @param {Response} res 
      * @returns 
      */
-    static async HandleVerification(req, res){
+    static async HandleVerification(req, res, next){
         let verifytoken = req.Url.vars.token
         let errors = []
         let success = []
@@ -278,6 +268,7 @@ module.exports = class AccountController extends Controller{
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, success))
         })
         res.Redirect('/')
+        next()
     }
 
     /**
@@ -286,7 +277,7 @@ module.exports = class AccountController extends Controller{
      * @param {Response} res 
      * @returns 
      */
-    static async HandlePasswordReset(req, res){
+    static async HandlePasswordReset(req, res, next){
         let errors = []
         let resettoken = req.Url.vars.token
         req.session.url = `${req.Url.pathname}${req.Url.search}`
@@ -299,12 +290,12 @@ module.exports = class AccountController extends Controller{
             if(errors.length > 0){
                 res.Redirect('/')
             }
+            next()
         }
 
         if(!resettoken) {
             errors.push("There was no token provided")
-            handleErrors()
-            return
+            return handleErrors()
         }
         let user = await User.Find({
             where: {
@@ -329,7 +320,7 @@ module.exports = class AccountController extends Controller{
      * @param {Response} res 
      * @returns 
      */
-    static async HandlePasswordResetPost(req, res){
+    static async HandlePasswordResetPost(req, res, next){
         const passwordMessage = 'must contain 1 uppercase, 1 lowercase, 1 number and 1 special character'
         errors = []
         let success = []
@@ -392,18 +383,6 @@ module.exports = class AccountController extends Controller{
         }
         delete req.session.url
         delete req.session.token
-    }
-
-    /**
-     * 
-     * @param {Request} req 
-     * @param {Response} res 
-     * @returns 
-     */
-    static async HandleLogout(req, res){
-        if(req.session.user){
-            delete req.session.user
-        }
-        res.Redirect('/login')
+        next()
     }
 };

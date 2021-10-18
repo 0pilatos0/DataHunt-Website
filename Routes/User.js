@@ -1,9 +1,12 @@
 const UserController = require("../Controllers/UserController");
-const Route = require("../Core/Route");
+const Router = require("../Core/Router");
+const Account = require("./Account");
 
-module.exports = class User extends Route{
+module.exports = class User extends Router{
     constructor() {
         super('')
+
+        this.use(Account.Authenticated)
 
         this.get('/profile', UserController.HandleProfile)
 

@@ -4,6 +4,9 @@ const Feedback = require('../Core/Feedback/Feedback');
 const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
 const Request = require('../Core/Request');
 const Response = require('../Core/Response');
+const fs = require('fs');
+const path = require('path');
+const File = require('../Models/File');
 
 module.exports = class AdminController extends Controller{
     constructor() {
@@ -16,16 +19,53 @@ module.exports = class AdminController extends Controller{
      * @param {Response} res 
      * @returns 
      */
-    static async HandleAdmin(req, res){
-        if(!req.session.user){
-            return res.Redirect(`/login?url=/admin`)
-        }
-        if(req.session.user.roles.indexOf("admin") == -1){
-            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, `You don't have the permissions to be here.`))
-            return res.Redirect('/')
-        }
-        res.Render("/views/admin", {
+    static async HandleAdmin(req, res, next){
+        res.Render("/views/admin/admin", {
             admin: req.session.user.username
         });
+        next()
+    }
+
+    /**
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     * @returns 
+     */
+    static async HandleUpload(req, res, next){
+        res.Render("/views/admin/upload", {
+            admin: req.session.user.username
+        });
+        next()
+    }
+
+    /**
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     * @returns 
+     */
+    static async HandleUploadPost(req, res, next){
+        req.data.customName = `${req.data.customName}${path.extname(req.data.name)}`
+        let errors = []
+        if(req.data.file == ""){
+            errors.push("File can't be empty")
+        }
+        else{
+            let name = req.data.customName == path.extname(req.data.name) ? req.data.name : req.data.customName
+            // fs.writeFileSync(name, req.data.file, 'base64')
+            await File.Create({
+                create: {
+                    name,
+                    file: req.data.file
+                }
+            })
+            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `Successfully uploaded ${name}`))
+        }
+        errors.map(error => {
+            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, error))
+        })
+        res.Redirect('/admin/upload')
+        next()
     }
 };
