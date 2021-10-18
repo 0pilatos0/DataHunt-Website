@@ -53,11 +53,11 @@ module.exports = class AdminController extends Controller{
         }
         else{
             let name = req.data.customName == path.extname(req.data.name) ? req.data.name : req.data.customName
-            // fs.writeFileSync(name, req.data.file, 'base64')
+            //fs.writeFileSync(name, req.data.file, 'base64')
             await File.Create({
                 create: {
                     name,
-                    file: req.data.file
+                    file: Buffer.from(req.data.file, 'base64')
                 }
             })
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `Successfully uploaded ${name}`))
@@ -66,6 +66,20 @@ module.exports = class AdminController extends Controller{
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, error))
         })
         res.Redirect('/admin/upload')
+        next()
+    }
+
+    /**
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     * @returns 
+     */
+
+    static async HandleFiles(req, res, next){
+        let file = await File.Last({})
+        res.WriteHead(200, {'Content-Type': 'application/pdf'})
+        res.Send(file.file)
         next()
     }
 };

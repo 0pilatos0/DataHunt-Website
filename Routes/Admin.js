@@ -17,6 +17,8 @@ module.exports = class Admin extends Router{
         this.get('/upload', AdminController.HandleUpload)
 
         this.post('/upload', AdminController.HandleUploadPost)
+
+        this.get('/files', AdminController.HandleFiles)
     }
 
     static async HasPermissions(req, res, next){

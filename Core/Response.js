@@ -77,4 +77,8 @@ module.exports = class Response{
         this.Render('/views/404')
         this.End()
     }
+
+    WriteHead(statusCode, content){
+        this.#res.writeHead(statusCode, content)
+    }
 }

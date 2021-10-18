@@ -1,7 +1,8 @@
 <form action="" method="post" id="uploadForm">
     <div>
         <label for="file">File:</label>
-        <input type="file" name="file" id="file">
+        <input type="file" id="fileInput">
+        <input type="hidden" name="file" id="file">
     </div>
     <div>
         <label for="name">Name of file (if name is empty, it will pick the name of the file):</label>
@@ -18,7 +19,7 @@
 <script>
     upload.onclick = (e) => {
         e.preventDefault()
-        let file = document.getElementById('file').files[0]
+        let file = document.getElementById('fileInput').files[0]
         let request = new XMLHttpRequest()
         request.open("POST", window.location.href, true)
         request.onload = (e) => {
@@ -29,7 +30,7 @@
             fileReader.onload = () => {
                 let data = fileReader.result
                 let base64 = data.replace(/^[^,]*,/, '')
-                file.value = base64
+                document.getElementById('file').value = base64
                 document.getElementById('name').value = file.name
                 uploadForm.submit()
                 //request.send(`name=${file.name}&file=${encodeURIComponent(base64)}&customName=${document.getElementById('name').value}`)
