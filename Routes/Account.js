@@ -32,7 +32,6 @@ module.exports = class Account extends Router{
      */
     static async Authenticated(req, res, next){
         if(!req.session.user){
-            console.log(req.Url)
             res.Redirect(`/login?url=${req.Url.pathname}${req.Url.search}`)
             return res.End()
         }
