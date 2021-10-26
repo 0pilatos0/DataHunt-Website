@@ -22,6 +22,10 @@ module.exports = class Account extends Router{
         this.get('/resetpassword', AccountController.HandlePasswordReset)
 
         this.post('/resetpassword', AccountController.HandlePasswordResetPost)
+
+        this.get('/forgotpassword', AccountController.HandleForgotPassword)
+
+        this.post('/forgotpassword', AccountController.HandleForgotPasswordPost)
     }
 
     /**

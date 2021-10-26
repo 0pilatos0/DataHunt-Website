@@ -385,4 +385,82 @@ module.exports = class AccountController extends Controller{
         delete req.session.token
         next()
     }
+
+    /**
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     * @returns 
+     */
+    static async HandleForgotPassword(req, res, next){
+        res.Render('/views/account/forgotpassword')
+        next()
+    }
+
+    /**
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     * @returns 
+     */
+    static async HandleForgotPasswordPost(req, res, next){
+        let errors = []
+        let success = []
+        if(req.data.email == ''){
+            errors.push(`Email can't be empty`)
+        }
+        else{
+            if(!req.data.email.match(Regex.Email)){
+                errors.push(`Email must contain an '@'`)
+            }
+        }
+        if(errors.length == 0){
+            let user = await User.Find({
+                where: {
+                    email: req.data.email
+                }
+            })
+            if(user != false){
+                if(user.verified){
+                    if(user.resettoken == null){
+                        let token = Salter.GenerateRandomToken()  
+                        await User.Update({
+                            where: {
+                                email: req.data.email
+                            },
+                            set: {
+                                resettoken: token
+                            }
+                        })
+                        let htmlData = HTMLLoader.Read("./Mail/resetPasswordMail.html").html
+                        htmlData = htmlData.replace('{{url}}', `http://${process.env.HOST}:${process.env.PORT}/resetpassword?token=${token}`)
+                        htmlData = htmlData.replace('{{username}}', user.username)
+                        let mailState = await Mailer.SendMail({
+                            to: user.email,
+                            subject: 'DataHunt reset password',
+                            html: htmlData
+                        })
+                        success.push("You now received an email with a reset link")
+                    }
+                    else{
+                        errors.push("You already received an email with a reset link")
+                    }
+                }
+                else{
+                    errors.push("Your account isn't verified")
+                }
+            }
+            else{
+                errors.push("Your account doesn't exist")
+            }
+        }
+        success.map(success => {
+            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, success))
+        })
+        errors.map(error => {
+            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, error))
+        })
+        res.Redirect('/forgotpassword')
+        next()
+    }
 };

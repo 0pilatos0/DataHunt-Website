@@ -48,6 +48,7 @@ module.exports = class Response{
                     ${this.#req.session.user ? "" : `document.getElementById("profile").style.display = "none"`}
                     ${this.#req.session.user ? "" : `document.getElementById("logout").style.display = "none"`}
                     ${this.#req.session.user ? `document.getElementById("login").style.display = "none"` : ""}
+                    ${this.#req.session.user ? `document.getElementById("register").style.display = "none"` : ""}
                     ${this.#req.session.user?.roles.indexOf("admin") > -1 ? "" : `document.getElementById("admin").style.display = "none"` }
                 </script>
             `

@@ -21,5 +21,13 @@
     </div>
     <div>
         <button type="submit">Register</button>
+        <button id="forgotPassword">Forgot password</button>
     </div>
 </form>
+
+<script>
+    forgotPassword.onclick = (e) => {
+        e.preventDefault()
+        window.location.href = '/forgotpassword'
+    }
+</script>
