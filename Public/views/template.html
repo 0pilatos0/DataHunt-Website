@@ -27,11 +27,18 @@
         <a href="/" id="title">DataHunt</a>
         <a id="logout" href="/logout">Logout</a>
         <a id="profile" href="/profile">{{profile}}</a>
-        <a id="admin" href="/admin">Admin</a>
+        <div class="dropdownHolder">
+            <a id="admin" href="/admin">Admin</a>
+            <div class="dropdown">
+                <a href="/admin/users">Users</a>
+            </div>
+        </div>
         <a id="login" href="/login">Login</a>
         <a id="register" href="/register">Register</a>
+        <script>if(window.location.host == "datahunt.duckdns.org"){document.write('<a href="/game">Game</a>')}</script>
     </div>
     <div id="body">{{body}}</div>
+    <div id="footer">DataHunt &copy; <script>document.write(new Date().getFullYear())</script></div>
     {{code}}
 </body>
 </html>

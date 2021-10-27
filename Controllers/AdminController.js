@@ -48,21 +48,27 @@ module.exports = class AdminController extends Controller{
      * @returns 
      */
     static async HandleUploadPost(req, res, next){
-        req.data.customName = `${req.data.customName}${path.extname(req.data.name)}`
         let errors = []
-        if(req.data.file == ""){
-            errors.push("File can't be empty")
+        let fileExtension = path.extname(req.data.name)
+        if(fileExtension != '.pdf'){
+            errors.push("File must be a .pdf file")
         }
-        else{
-            let name = req.data.customName == path.extname(req.data.name) ? req.data.name : req.data.customName
-            //fs.writeFileSync(name, req.data.file, 'base64')
-            await File.Create({
-                create: {
-                    name,
-                    file: Buffer.from(req.data.file, 'base64')
-                }
-            })
-            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `Successfully uploaded ${name}`))
+        if(errors.length == 0){
+            if(fileExtension != '.pdf') req.data.customName = `${req.data.customName}${fileExtension}`
+            if(req.data.file == ""){
+                errors.push("File can't be empty")
+            }
+            else{
+                let name = req.data.customName == fileExtension ? req.data.name : req.data.customName
+                //fs.writeFileSync(name, req.data.file, 'base64')
+                await File.Create({
+                    create: {
+                        name,
+                        file: Buffer.from(req.data.file, 'base64')
+                    }
+                })
+                req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `Successfully uploaded ${name}`))
+            }
         }
         errors.map(error => {
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, error))

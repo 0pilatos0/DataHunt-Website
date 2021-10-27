@@ -19,7 +19,7 @@ module.exports = class HTMLLoader{
                     })
                 }
             }
-            else throw console.error(`${htmlFilePath} doesn't exist`)
+            else return {html:'',vars:{}}
         } 
         else throw console.error(`${htmlFilePath} file extension must be .html`)
         return {

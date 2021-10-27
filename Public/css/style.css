@@ -14,6 +14,7 @@ body{
     margin: 0;
     background: var(--background);
     min-height: 100vh;
+    overflow: hidden;
 }
 
 button{
@@ -40,7 +41,7 @@ button:hover{
 #navbar a{
     display: inline-grid;
     padding: 0 1rem;
-    height: 100%;
+    height: 4rem;
     color: var(--font);
     text-decoration: none;
     font-size: 2rem;
@@ -66,6 +67,12 @@ button:hover{
     max-height: 3rem;
 }
 
+#navbar div{
+    height: 100%;
+    display: inline-block;
+    float: right;
+}
+
 #currentProfilePicture{
     image-rendering: pixelated;
     max-height: 25rem;
@@ -76,27 +83,21 @@ button:hover{
     max-height: 25rem;
 }
 
-div input[type=text], div input[type=password], div input[type=email]{
-    float: right;
-}
-
-div input[type=checkbox]{
-    /* float: left; */
-    float: right;
+.customForm div input[type=checkbox]{
     width: 1.5rem;
     height: 1.5rem;
 }
 
-form{
+.customForm{
     width: 25rem;
 }
 
-form div{
+.customForm div{
     width: 100%;
     padding-top: 0.5rem;
 }
 
-form div label{
+.customForm div label{
     padding-right: 0.5rem;
 }
 
@@ -104,26 +105,35 @@ select, option{
     color: black;
 }
 
-form div input{
+.customForm div input[type=file]{
+    color: white;
+}
+
+.customForm div input{
     height: 1.5rem;
     width: 12.5rem;
     color: black;
-}
-
-form div button:last-of-type{
     float: right;
 }
 
-form div button{
+.customForm div h1{
+    width: 90vw;
+}
+
+.customForm div button:last-of-type{
+    float: right;
+}
+
+.customForm div button{
     align-content: center;
 }
 
 #body{
     box-sizing: border-box;
-    padding: 0px 25px;
-    max-width: 80vw;
+    max-width: calc(100vw - 100px);
     margin: 0 auto;
-    min-height: calc(100vh - 4rem);
+    min-height: calc(100vh - 4rem - 2rem);
+    max-height: calc(100vh - 4rem - 2rem);
 }
 
 /*feedback*/
@@ -138,7 +148,7 @@ form div button{
     position: relative;
     /* font-family: 'Odibee Sans', cursive; */
     font-size: 2.5rem;
-    padding: 10px 50px 5px;
+    padding: 10px 50px 2px;
     margin-top: 10px;
     min-width: 60vw;
     text-align: center;
@@ -156,7 +166,6 @@ form div button{
 }
 
 @keyframes apear-and-disapear{
-
     0%{
         top: -200px;
     }
@@ -175,6 +184,47 @@ form div button{
         top: 10px;
         opacity: 0%;
     }
-
-
 } 
+
+embed{
+    width: 100%;
+    box-sizing: border-box;
+    height: calc(100vh - 4rem - 2rem - 0.05rem);
+}
+
+#footer{
+    bottom: 0;
+    background: var(--accent);
+    text-align: center;
+    height: 2rem;
+    font-size: 1.25rem;
+}
+
+.dropdown{
+    position: absolute;
+    top: 4rem;
+    min-width: 100%;
+    background: var(--accent);
+    min-height: 100%;
+    height: auto !important;
+    border-radius: 0px 0px 10px 10px;
+    display: none !important;
+}
+
+.dropdown a{
+    width: 100%;
+    height: 4rem;
+}
+
+.dropdown a:last-of-type{
+    border-radius: 0px 0px 10px 10px;
+}
+
+.dropdownHolder:hover .dropdown{
+    display: block !important;
+}
+
+.dropdownHolder{
+    position: relative;
+    z-index: 99999999999;
+}

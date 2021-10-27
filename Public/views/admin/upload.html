@@ -1,12 +1,15 @@
-<form action="" method="post" id="uploadForm">
+<form action="" method="post" id="uploadForm" class="customForm">
+    <div>
+        <h1>PDF upload</h1>
+    </div>
+    <div>
+        <label for="name">Name of file:</label>
+        <input type="text" name="customName" id="customName">
+    </div>
     <div>
         <label for="file">File:</label>
         <input type="file" id="fileInput">
         <input type="hidden" name="file" id="file">
-    </div>
-    <div>
-        <label for="name">Name of file (if name is empty, it will pick the name of the file):</label>
-        <input type="text" name="customName" id="customName">
     </div>
     <div>
         <input type="hidden" name="name" id="name">
@@ -32,6 +35,7 @@
                 let base64 = data.replace(/^[^,]*,/, '')
                 document.getElementById('file').value = base64
                 document.getElementById('name').value = file.name
+                document.getElementById('customName').value = file.name
                 uploadForm.submit()
                 //request.send(`name=${file.name}&file=${encodeURIComponent(base64)}&customName=${document.getElementById('name').value}`)
             }
