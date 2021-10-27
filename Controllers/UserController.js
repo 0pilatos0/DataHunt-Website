@@ -59,6 +59,7 @@ module.exports = class UserController extends Controller{
                     image: req.data.picture
                 }
             })
+            req.session.user.profilePicture = req.data.picture
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully uploaded your profile picture`))
         }
         else{
@@ -70,6 +71,7 @@ module.exports = class UserController extends Controller{
                     image: req.data.picture
                 }
             })
+            req.session.user.profilePicture = req.data.picture
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully changed your profile picture`))
         }
         res.Redirect('/profile')

@@ -10,7 +10,7 @@ const Mailer = require('../Core/Mailer');
 const HTMLLoader = require('../Loaders/HTMLLoader');
 const Utils = require('../Core/Utils');
 const Role = require('../Models/Role');
-const Account = require('../Routes/Account');
+const ProfilePicture = require('../Models/ProfilePicture')
 
 module.exports = class AccountController extends Controller{
     constructor() {
@@ -190,7 +190,7 @@ module.exports = class AccountController extends Controller{
                 }
             }
         }
-        else{
+        else if(errors.length == 0){
             errors.push("Your username or password is incorrect")
         }
         let roles = await Role.Select({
@@ -206,6 +206,13 @@ module.exports = class AccountController extends Controller{
         roles.map(role => {
             parsedRoles.push(role.name)
         })
+        let profilePicture = await ProfilePicture.Find({
+            where: {
+                user_id: user.id
+            },
+            select: ['image']
+        })
+        profilePicture = profilePicture.image
         if(errors.length == 0){
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully logged in`))
             req.session.user = {
@@ -213,7 +220,8 @@ module.exports = class AccountController extends Controller{
                 username: user.username,
                 email: user.email,
                 name: user.name,
-                roles: parsedRoles
+                roles: parsedRoles,
+                profilePicture
             }
             if(req.Url.vars?.url){
                 res.Redirect(req.Url.vars.url)

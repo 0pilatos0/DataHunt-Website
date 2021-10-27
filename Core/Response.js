@@ -5,6 +5,7 @@ const fs = require('fs')
 const Feedback = require('../Core/Feedback/Feedback');
 const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
 const Utils = require('./Utils');
+const ProfilePicture = require('../Models/ProfilePicture')
 
 module.exports = class Response{
     #res
@@ -40,6 +41,10 @@ module.exports = class Response{
         Object.keys(vars).map(v => {
             htmlPage.vars[v] = vars[v]
         })
+        let profile = '<i class="far fa-user"></i>'
+        if(this.#req.session.user){
+            profile = `<img id="profilePicture" src="${this.#req.session.user.profilePicture}">`
+        }
         htmlPage.html = HTMLLoader.Replace(templatePage.html, {
             body: htmlPage.html,
             feedback: this.#req.session.feedback?.join(""),
@@ -51,7 +56,8 @@ module.exports = class Response{
                     ${this.#req.session.user ? `document.getElementById("register").style.display = "none"` : ""}
                     ${this.#req.session.user?.roles.indexOf("admin") > -1 ? "" : `document.getElementById("admin").style.display = "none"` }
                 </script>
-            `
+            `,
+            profile 
         })
         delete this.#req.session.feedback
         if(!path.extname(pageName)) this.Send(HTMLLoader.Replace(htmlPage.html, htmlPage.vars))

@@ -1,37 +1,125 @@
+:root {
+    --accent: #00ABE7;
+    --extra: #0081AF;
+    --font: #FBFEF9;
+    --background: #333;
+}
+
 *{
+    color: var(--font);
     font-family: 'Roboto', sans-serif;
 }
 
 body{
-    background-color: #CCCCCC;
-}
-.resetPasswordForm{
-    width: 100%;
-    max-width: 600px;
-    background-color: #F2F2F2;
-    margin: 0 auto;
-    border-radius: 15px;
-    padding: 20px;
-    text-align: center;
-    margin-top: 100px;
-}
-.resetPasswordForm h1{
-    color: black;
-    font-weight: 700;
-    font-size: 50px;
-}
- .resetPasswordForm #email{
-    text-align: center;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    font-size: 2rem;
+    margin: 0;
+    background: var(--background);
+    min-height: 100vh;
 }
 
-.resetPasswordForm hr{
+button{
+    background: var(--accent);
+    border: none;
+    padding: 2.5px 10px;
+    transition: background-color 0.5s;
+}
+
+button:hover{
+    color: var(--background);
+    background: var(--extra);
+    border: none;
+}
+
+#navbar{
+    background: var(--accent);
+    height: 4rem;
+    width: 100vw;
+    align-items: center;
+    margin: auto;
+}
+
+#navbar a{
+    display: inline-grid;
+    padding: 0 1rem;
+    height: 100%;
+    color: var(--font);
+    text-decoration: none;
+    font-size: 2rem;
+    margin: auto;
+    text-align: center;
+    align-content: center;
+    float: right;
+    transition: background-color 0.5s;
+}
+
+#navbar a:hover{
+    color: var(--background);
+    background: var(--extra);
+}
+
+#navbar #title{
+    float: left;
+    font-weight: bold;
+}
+
+#navbar #profilePicture{
+    image-rendering: pixelated;
+    max-height: 3rem;
+}
+
+#currentProfilePicture{
+    image-rendering: pixelated;
+    max-height: 25rem;
+}
+
+#pictureOutputHolder{
+    max-width: 25rem;
+    max-height: 25rem;
+}
+
+div input[type=text], div input[type=password], div input[type=email]{
+    float: right;
+}
+
+div input[type=checkbox]{
+    /* float: left; */
+    float: right;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+form{
+    width: 25rem;
+}
+
+form div{
+    width: 100%;
+    padding-top: 0.5rem;
+}
+
+form div label{
+    padding-right: 0.5rem;
+}
+
+form div input{
+    height: 1.5rem;
+    width: 12.5rem;
     color: black;
-    height: 3px;
-    width: 60%;
+}
+
+form div button:last-of-type{
+    float: right;
+}
+
+form div button{
+    align-content: center;
+}
+
+#body{
+    box-sizing: border-box;
+    padding: 0px 25px;
+    max-width: 80vw;
     margin: 0 auto;
+    min-height: calc(100vh - 4rem);
 }
 
 /*feedback*/
@@ -44,14 +132,14 @@ body{
 }
 #feedback{
     position: relative;
-    font-family: 'Odibee Sans', cursive;
+    /* font-family: 'Odibee Sans', cursive; */
     font-size: 2.5rem;
-    padding: 10px 50px;
+    padding: 10px 50px 5px;
     margin-top: 10px;
     min-width: 60vw;
     text-align: center;
     border-radius: 10px;
-
+    align-content: center;
     animation: apear-and-disapear 5s linear ;
 }
 
@@ -86,51 +174,3 @@ body{
 
 
 } 
-
-.resetPasswordForm button[type="submit"]{
-    background-color: #7F7F7F;
-    color: white;
-    border: none;
-    padding: 10px;
-    font-size: 1.5rem;
-    border-radius: 5px;
-    margin-top: 10px;
-
-}
-
-.resetPasswordForm input[type="password"]{
-    
-    font-size: 1.25em;
-    border-radius: 0.25rem;
-    text-align: center;
-}
-
-#navbar{
-    background: red;
-    height: 50px;
-    font-size: 35px;
-    top: 0;
-    position: relative;
-}
-
-#navbar a{
-    min-height: 100%;
-    color: black;
-    text-decoration: none;
-    float: right;
-    right: 25px;
-    position: absolute;
-}
-
-#navbar #profile{
-    right: 150px;
-}
-
-#navbar #admin{
-    right: 200px;
-}
-
-
-#navbar #register{
-    right: 125px;
-}

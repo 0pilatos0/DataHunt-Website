@@ -1,20 +1,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js" integrity="sha512-ooSWpxJsiXe6t4+PPjCgYmVfr1NS5QXJACcR/FPpsdm6kqG1FmQ2SVyg2RXeVuCRBLr0lWHnWJP6Zs1Efvxzww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" integrity="sha512-0SPWAwpC/17yYyZ/4HSllgaK7/gg9OlVozq8K7rf3J8LvCjYEEIfzzpnA2/SSjpGIunCSD18r3UhvDcu/xncWA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<div style="display: grid; position: relative; width: 100vw; grid-template-columns: 2;">
+<div style="display: grid; position: relative; grid-template-columns: 2;">
     <div id="currentProfilePicture">
         <div>
             <h1>Current profile picture:</h1>
         </div>
         <div>
-            <img src="{{profilePicture}}" style="width: 50%; image-rendering: pixelated;">
+            <img src="{{profilePicture}}" id="currentProfilePicture">
         </div>
     </div>
     <div>
-        <div>
-            <h1>{{action}} profile picture:</h1>
-        </div>
         <form id="profilePictureForm" action="/profilePicture" method="POST">
+            <div>
+                <h1>{{action}} profile picture:</h1>
+            </div>
             <div>
                 <label for="name">Picture:</label>
                 <input id="pictureInput" type="file" accept="image/jpeg, image/png">
@@ -29,10 +29,10 @@
         </form>
     </div>
     <div style="position: absolute; right: 0;">
-        <div>
-            <h1>Change account:</h1>
-        </div>
         <form action="/changeAccount" method="POST">
+            <div>
+                <h1>Change account:</h1>
+            </div>
             <div>
                 <label for="name">Name:</label>
                 <input type="text" name="name" value="{{name}}">
