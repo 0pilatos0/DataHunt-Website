@@ -40,5 +40,14 @@
     <div id="body">{{body}}</div>
     <div id="footer">DataHunt &copy; <script>document.write(new Date().getFullYear())</script></div>
     {{code}}
+    <script>
+        let aTags = document.querySelectorAll('a')
+        aTags.forEach(a => {
+            if(a.href == window.location.href){
+                a.style.background = 'var(--font)'
+                a.style.color = 'var(--accent)'
+            }
+        })
+    </script>
 </body>
 </html>
