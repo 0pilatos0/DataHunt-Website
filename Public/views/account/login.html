@@ -1,4 +1,4 @@
-<form action="" method="POST">
+<form action="" method="POST" id="form">
     <div>
         <h1>Login:</h1>
     </div>
@@ -21,6 +21,17 @@
 </form>
 
 <script>
+    window.onkeypress = (e) => {
+        switch (e.key) {
+            case "Enter":
+                e.preventDefault()
+                form.submit()
+                break;
+            default:
+                break;
+        }
+    }
+
     forgotPassword.onclick = (e) => {
         e.preventDefault()
         window.location.href = '/forgotpassword'

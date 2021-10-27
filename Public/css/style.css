@@ -100,6 +100,10 @@ form div label{
     padding-right: 0.5rem;
 }
 
+select, option{
+    color: black;
+}
+
 form div input{
     height: 1.5rem;
     width: 12.5rem;
