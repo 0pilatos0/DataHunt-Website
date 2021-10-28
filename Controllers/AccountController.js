@@ -225,7 +225,7 @@ module.exports = class AccountController extends Controller{
                 roles: parsedRoles,
             }
             if(profilePicture != false){
-                req.session.profilePicture = profilePicture
+                req.session.user.profilePicture = profilePicture
             }
             if(req.Url.vars?.url){
                 res.Redirect(req.Url.vars.url)
