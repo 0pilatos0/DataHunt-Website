@@ -76,10 +76,17 @@
         let breadcrumbPieces = window.location.pathname.slice(1).split('/')
         let breadcrumbString = ''
         breadcrumbPieces.map(piece => {
-            let button = document.createElement('a')
             breadcrumbString += `/${piece}`
-            button.innerHTML = piece == '' ? '<i class="fas fa-home"></i>' : document.querySelector(`a[href="${breadcrumbString}"]`).innerHTML
+            let aTag = document.querySelector(`a[href="${breadcrumbString}"]`)
+            let button = document.createElement('a')
             button.href = breadcrumbString
+            if(aTag != null){
+                button.innerHTML = piece == '' ? '<i class="fas fa-home"></i>' : aTag.innerHTML
+            }
+            else{
+                let pageTitle = document.querySelector('h1')
+                button.innerHTML = piece == '' ? '<i class="fas fa-home"></i>' : pageTitle.innerText
+            }
             breadcrumb.insertAdjacentElement('beforeend', button)
             if(breadcrumbPieces.indexOf(piece) != breadcrumbPieces.length - 1){
                 breadcrumb.innerHTML += ` > `
