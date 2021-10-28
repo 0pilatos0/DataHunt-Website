@@ -212,7 +212,9 @@ module.exports = class AccountController extends Controller{
             },
             select: ['image']
         })
-        profilePicture = profilePicture.image
+        if(profilePicture != false){
+            profilePicture = profilePicture.image
+        }
         if(errors.length == 0){
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully logged in`))
             req.session.user = {
