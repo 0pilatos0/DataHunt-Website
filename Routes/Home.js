@@ -1,7 +1,7 @@
 const HomeController = require("../Controllers/HomeController");
-const Route = require("../Core/Route");
+const Router = require("../Core/Router");
 
-module.exports = class Home extends Route{
+module.exports = class Home extends Router{
     constructor() {
         super('')
 
