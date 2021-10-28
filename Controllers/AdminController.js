@@ -153,7 +153,7 @@ module.exports = class AdminController extends Controller{
             if(doneUsers == maxUsers || doneUsers == users.length){
                 script += '</script>'
                 res.Render('/views/admin/users', {
-                    head: `<th>username</th><th>roles</th><th>add role</th>`,
+                    head: `<th>Username</th><th>Roles</th><th>Add role</th>`,
                     body,
                     script
                 })

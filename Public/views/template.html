@@ -31,6 +31,8 @@
             <a id="admin" href="/admin">Admin</a>
             <div class="dropdown">
                 <a href="/admin/users">Users</a>
+                <a href="/admin/files">Opleveringsdocument</a>
+                <a href="/admin/upload">PDF upload</a>
             </div>
         </div>
         <a id="login" href="/login">Login</a>
@@ -38,7 +40,7 @@
         <script>if(window.location.host == "datahunt.duckdns.org"){document.write('<a href="/game">Game</a>')}</script>
     </div>
     <div id="body">{{body}}</div>
-    <div id="footer">DataHunt &copy; <script>document.write(new Date().getFullYear())</script></div>
+    <div id="footer"><div id="left"></div><div id="middle">DataHunt &copy; <script>document.write(new Date().getFullYear())</script></div><div id="right"><a href="https://github.com/0pilatos0/DataHunt-Website"><i class="fab fa-github"></i></a></div></div>
     {{code}}
     <script>
         let aTags = document.querySelectorAll('a')
@@ -46,6 +48,7 @@
             if(a.href == window.location.href){
                 a.style.background = 'var(--font)'
                 a.style.color = 'var(--accent)'
+                a.onclick = () => {return false}
             }
         })
     </script>
