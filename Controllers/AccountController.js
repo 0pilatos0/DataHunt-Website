@@ -179,7 +179,7 @@ module.exports = class AccountController extends Controller{
         })
         if(user !== false){
             if(!user.verified){
-                errors.push(`You must verify your account before being able to login`)
+                errors.push(`Your account must be verified to login`)
             }
             if(!user.enabled){
                 errors.push(`Your account is disabled because you are banned`)
@@ -216,7 +216,7 @@ module.exports = class AccountController extends Controller{
             profilePicture = profilePicture.image
         }
         if(errors.length == 0){
-            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully logged in`))
+            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `Logged in successfully`))
             req.session.user = {
                 id: user.id,
                 username: user.username,
@@ -268,10 +268,10 @@ module.exports = class AccountController extends Controller{
                     verifytoken
                 }
             })
-            success.push(`You successfully verified your account`)
+            success.push(`You have successfully verified your account`)
         }
         else if(verifytoken){
-            errors.push(`User with verification token '${verifytoken}' couldn't be found`)
+            errors.push(`User with verification token '${verifytoken}' could not be found`)
         }
         errors.map(error => {
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, error))
@@ -321,7 +321,7 @@ module.exports = class AccountController extends Controller{
             })
         }
         else{
-            errors.push(`User with reset token '${resettoken}' couldn't be found`)
+            errors.push(`User with reset token '${resettoken}' could not be found`)
         }
         handleErrors()
     }
@@ -363,10 +363,10 @@ module.exports = class AccountController extends Controller{
             }
         }
         else{
-            errors.push(`User with reset token '${req.session.token}' couldn't be found`)
+            errors.push(`User with reset token '${req.session.token}' could not be found`)
         }
         if(req.data.password != req.data.repeatPassword){
-            errors.push("Passwords aren't the same")
+            errors.push("Passwords don't match")
         }
         if(errors.length == 0){
             let hashedPassword = Salter.HashPassword(req.data.password)
@@ -379,7 +379,7 @@ module.exports = class AccountController extends Controller{
                     resettoken: req.session.token
                 }
             })
-            success.push("Your password has successfully been changed")
+            success.push("Your password has been successfully changed")
         }
         if(errors.length > 0){
             errors.map(error => {
@@ -452,10 +452,10 @@ module.exports = class AccountController extends Controller{
                             subject: 'DataHunt reset password',
                             html: htmlData
                         })
-                        success.push("You now received an email with a reset link")
+                        success.push("We've sent you an email with a reset link")
                     }
                     else{
-                        errors.push("You already received an email with a reset link")
+                        errors.push("You've already received an email with a reset link")
                     }
                 }
                 else{
