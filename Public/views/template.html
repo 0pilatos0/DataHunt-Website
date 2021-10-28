@@ -78,7 +78,6 @@
         breadcrumbPieces.map(piece => {
             breadcrumbString += `/${piece}`
             let aTag = document.querySelector(`a[href="${breadcrumbString}"]`)
-            
             if(breadcrumbPieces.indexOf(piece) != breadcrumbPieces.length - 1){
                 let button = document.createElement('a')
                 button.href = breadcrumbString
