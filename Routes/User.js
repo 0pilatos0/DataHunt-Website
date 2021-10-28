@@ -4,14 +4,16 @@ const Account = require("./Account");
 
 module.exports = class User extends Router{
     constructor() {
-        super('')
+        super('/profile')
 
         this.use(Account.Authenticated)
 
-        this.get('/profile', UserController.HandleProfile)
+        this.get('', UserController.HandleProfile)
 
         this.post('/profilePicture', UserController.HandleProfilePicturePost)
 
         this.post('/changeAccount', UserController.HandleChangeAccountPost)
+
+        this.get('/deleteProfilePicture', UserController.HandleDeleteProfilePicture)
     }
 }

@@ -1,17 +1,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js" integrity="sha512-ooSWpxJsiXe6t4+PPjCgYmVfr1NS5QXJACcR/FPpsdm6kqG1FmQ2SVyg2RXeVuCRBLr0lWHnWJP6Zs1Efvxzww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" integrity="sha512-0SPWAwpC/17yYyZ/4HSllgaK7/gg9OlVozq8K7rf3J8LvCjYEEIfzzpnA2/SSjpGIunCSD18r3UhvDcu/xncWA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<div style="display: grid; position: relative; grid-template-columns: 2;">
-    <div id="currentProfilePicture">
+<div id="profileHolder">
+    <div id="currentProfilePictureHolderParent">
         <div>
             <h1>Current profile picture:</h1>
         </div>
-        <div>
+        <div id="currentProfilePictureHolder">
             <img src="{{profilePicture}}" id="currentProfilePicture">
+            <div id="currentProfilePictureColor"></div>
+            <a href="/profile/deleteProfilePicture" id="deleteProfilePicture"><i class="fa fa-trash" aria-hidden="true"></i></a>
         </div>
     </div>
     <div>
-        <form id="profilePictureForm" action="/profilePicture" method="POST" class="customForm">
+        <form id="profilePictureForm" action="/profile/profilePicture" method="POST" class="customForm">
             <div>
                 <h1>{{action}} profile picture:</h1>
             </div>
@@ -28,8 +30,8 @@
             </div>
         </form>
     </div>
-    <div style="position: absolute; right: 0;">
-        <form action="/changeAccount" method="POST" class="customForm">
+    <div id="changeAccountHolder">
+        <form action="/profile/changeAccount" method="POST" class="customForm">
             <div>
                 <h1>Change account:</h1>
             </div>
@@ -97,7 +99,7 @@
         border-radius: 50%;
     }
     .cropper-face {
-        background-color:inherit !important;
+        background-color: inherit !important;
     }
 </style>
 

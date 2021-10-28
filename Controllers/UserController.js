@@ -33,6 +33,7 @@ module.exports = class UserController extends Controller{
             script: `
                 <script>
                     ${profilePicture ? "" : `currentProfilePicture.style.display = "none"`}
+                    ${profilePicture ? "" : `currentProfilePictureHolderParent.style.display = "none"`}
                 </script>
             `,
             profilePicture: profilePicture?.image || ""
@@ -86,6 +87,26 @@ module.exports = class UserController extends Controller{
      */
     static async HandleChangeAccountPost(req, res, next){
         console.log(req.data)
+        next()
+    }
+
+    /**
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     * @returns 
+     */
+    static async HandleDeleteProfilePicture(req, res, next){
+        if(req.session.user.profilePicture){
+            delete req.session.user.profilePicture
+            await ProfilePicture.Delete({
+                where: {
+                    user_id: req.session.user.id
+                }
+            })
+            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully deleted your profile picture`))
+        }
+        res.Redirect('/profile')
         next()
     }
 }

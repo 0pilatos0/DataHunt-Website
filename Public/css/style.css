@@ -3,6 +3,7 @@
     --extra: #0081AF;
     --font: #FBFEF9;
     --background: #333;
+    --font-size: 1.25rem;
 }
 
 *{
@@ -44,7 +45,7 @@ button:hover{
     height: 2.5rem;
     color: var(--font);
     text-decoration: none;
-    font-size: 1.25rem;
+    font-size: var(--font-size);
     margin: auto;
     text-align: center;
     align-content: center;
@@ -75,7 +76,8 @@ button:hover{
 
 #currentProfilePicture{
     image-rendering: pixelated;
-    max-height: 25rem;
+    height: 10rem;
+    max-height: 10rem;
 }
 
 #pictureOutputHolder{
@@ -252,4 +254,54 @@ embed{
 .dropdownHolder{
     position: relative;
     z-index: 99999999999;
+}
+
+#currentProfilePictureHolder #deleteProfilePicture{
+    position: absolute;
+    right: 0.25rem;
+    top: 0.1rem;
+    display: none;
+}
+
+#currentProfilePictureHolder #deleteProfilePicture i{
+    color: red;
+}
+
+#currentProfilePictureHolder:hover #currentProfilePictureColor, #currentProfilePictureHolder:hover #deleteProfilePicture{
+    display: unset;
+}
+
+#currentProfilePictureHolder{
+    position: relative;
+    height: 10rem;
+    width: 10rem;
+}
+
+#currentProfilePictureColor{
+    background: rgba(255, 255, 255, 0.5);
+    width: 10rem;
+    height: 10rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+#changeAccountHolder{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#profileHolder{
+    position: relative;
+}
+
+.currentPage{
+    background: var(--font) !important;
+    color: var(--accent) !important;
+}
+
+.currentPage i{
+    color: var(--accent) !important;
 }
