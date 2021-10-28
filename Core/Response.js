@@ -42,7 +42,7 @@ module.exports = class Response{
             htmlPage.vars[v] = vars[v]
         })
         let profile = '<i class="far fa-user"></i>'
-        if(this.#req.session.user.profilePicture){
+        if(this.#req.session.user?.profilePicture){
             profile = `<img id="profilePicture" src="${this.#req.session.user.profilePicture}">`
         }
         htmlPage.html = HTMLLoader.Replace(templatePage.html, {
