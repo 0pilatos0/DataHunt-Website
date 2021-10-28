@@ -75,7 +75,8 @@ button:hover{
 
 #currentProfilePicture{
     image-rendering: pixelated;
-    max-height: 25rem;
+    height: 10rem;
+    max-height: 10rem;
 }
 
 #pictureOutputHolder{
@@ -132,8 +133,8 @@ select, option{
     box-sizing: border-box;
     max-width: calc(100vw - 100px);
     margin: 0 auto;
-    min-height: calc(100vh - 2.5rem - 1.5rem);
-    max-height: calc(100vh - 2.5rem - 1.5rem);
+    min-height: calc(100vh - 2.5rem - 1.5rem - 1.5rem);
+    max-height: calc(100vh - 2.5rem - 1.5rem - 1.5rem);
 }
 
 /*feedback*/
@@ -146,6 +147,7 @@ select, option{
 }
 #feedback{
     position: relative;
+    display: inline-flex;
     /* font-family: 'Odibee Sans', cursive; */
     font-size: 2.5rem;
     padding: 10px 50px 2px;
@@ -155,6 +157,21 @@ select, option{
     border-radius: 10px;
     align-content: center;
     animation: apear-and-disapear 5s linear ;
+}
+
+#feedback p{
+    text-align: center;
+    width: 100%;
+}
+
+#feedback button{
+    position: absolute;
+    right: 1rem;
+    transition: none;
+}
+
+#feedback button:hover{
+    background: none;
 }
 
 .feedback-error{
@@ -189,7 +206,7 @@ select, option{
 embed{
     width: 100%;
     box-sizing: border-box;
-    height: calc(100vh - 2.5rem - 1.5rem - 0.05rem);
+    height: calc(100vh - 2.5rem - 1.5rem - 1.5rem);
 }
 
 #footer{
@@ -215,7 +232,6 @@ embed{
 
 #footer div a:hover i{
     color: var(--background);
-    /* background: pink; */
 }
 
 #footer #right{
@@ -237,13 +253,12 @@ embed{
 
 .dropdown a{
     width: 100%;
-    /* height: 2.5rem; */
     padding: 1.25rem 0px;
 }
 
-.dropdown a:last-of-type{
-    /* border-radius: 0px 0px 10px 10px; */
-}
+/* .dropdown a:last-of-type{
+    border-radius: 0px 0px 10px 10px;
+} */
 
 .dropdownHolder:hover .dropdown{
     display: block !important;
@@ -252,4 +267,89 @@ embed{
 .dropdownHolder{
     position: relative;
     z-index: 99999999999;
+}
+
+#currentProfilePictureHolder #deleteProfilePicture{
+    position: absolute;
+    right: 0.25rem;
+    top: 0.1rem;
+    display: none;
+}
+
+#currentProfilePictureHolder #deleteProfilePicture i{
+    color: red;
+}
+
+#currentProfilePictureHolder:hover #currentProfilePictureColor, #currentProfilePictureHolder:hover #deleteProfilePicture{
+    display: unset;
+}
+
+#currentProfilePictureHolder{
+    position: relative;
+    height: 10rem;
+    width: 10rem;
+}
+
+#currentProfilePictureColor{
+    background: rgba(255, 255, 255, 0.5);
+    width: 10rem;
+    height: 10rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+#changeAccountHolder{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#profileHolder{
+    position: relative;
+}
+
+.currentPage{
+    background: var(--font) !important;
+    color: var(--accent) !important;
+}
+
+.currentPage i{
+    color: var(--accent) !important;
+}
+
+.eye{
+    position: absolute;
+    right: .4rem;
+    color: var(--background);
+    top: 0.75rem;
+    width: 1rem;
+    height: 1rem;
+    max-width: 1rem;
+    max-height: 1rem;
+}
+
+form div{
+    position: relative;
+}
+
+#breadcrumb{
+    background: var(--extra);
+    padding: 0px 2.5rem;
+    max-height: 1.5rem;
+}
+
+#breadcrumb a{
+    text-decoration: none;
+    color: var(--font);
+}
+
+#breadcrumb a:hover{
+    color: var(--background);
+}
+
+#breadcrumb #profilePicture{
+    max-height: 1rem;
+    image-rendering: pixelated;
 }

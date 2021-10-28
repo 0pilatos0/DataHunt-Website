@@ -39,6 +39,7 @@
         <a id="register" href="/register">Register</a>
         <script>if(window.location.host == "datahunt.duckdns.org"){document.write('<a href="/game">Game</a>')}</script>
     </div>
+    <div id="breadcrumb"></div>
     <div id="body">{{body}}</div>
     <div id="footer"><div id="left"></div><div id="middle">DataHunt &copy; <script>document.write(new Date().getFullYear())</script></div><div id="right"><a href="https://github.com/0pilatos0/DataHunt-Website"><i class="fab fa-github"></i></a></div></div>
     {{code}}
@@ -46,9 +47,42 @@
         let aTags = document.querySelectorAll('a')
         aTags.forEach(a => {
             if(a.href == window.location.href){
-                a.style.background = 'var(--font)'
-                a.style.color = 'var(--accent)'
+                a.classList.add('currentPage')
                 a.onclick = () => {return false}
+            }
+        })
+
+        let passwordInputs = document.querySelectorAll('input[type="password"]')
+        Array.from(passwordInputs).map(input => {
+            let eyeHolder = document.createElement('i')
+            eyeHolder.classList.add('fas')
+            eyeHolder.classList.add('fa-eye')
+            eyeHolder.classList.add('eye')
+            eyeHolder.onclick = () => {
+                if(eyeHolder.classList.contains('fa-eye')){
+                    eyeHolder.classList.remove('fa-eye')
+                    eyeHolder.classList.add('fa-eye-slash')
+                    input.type = 'text'
+                }
+                else{
+                    eyeHolder.classList.add('fa-eye')
+                    eyeHolder.classList.remove('fa-eye-slash')
+                    input.type = 'password'
+                }
+            }
+            input.parentElement.insertAdjacentElement('beforeend', eyeHolder)
+        })
+
+        let breadcrumbPieces = window.location.pathname.slice(1).split('/')
+        let breadcrumbString = ''
+        breadcrumbPieces.map(piece => {
+            let button = document.createElement('a')
+            breadcrumbString += `/${piece}`
+            button.innerHTML = piece == '' ? '<i class="fas fa-home"></i>' : document.querySelector(`a[href="${breadcrumbString}"]`).innerHTML
+            button.href = breadcrumbString
+            breadcrumb.insertAdjacentElement('beforeend', button)
+            if(breadcrumbPieces.indexOf(piece) != breadcrumbPieces.length - 1){
+                breadcrumb.innerHTML += ` > `
             }
         })
     </script>
