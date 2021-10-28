@@ -76,7 +76,6 @@
         let breadcrumbPieces = window.location.pathname.slice(1).split('/')
         let breadcrumbString = ''
         breadcrumbPieces.map(piece => {
-            
             let button = document.createElement('a')
             breadcrumbString += `/${piece}`
             button.innerHTML = piece == '' ? '<i class="fas fa-home"></i>' : document.querySelector(`a[href="${breadcrumbString}"]`).innerHTML

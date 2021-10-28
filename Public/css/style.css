@@ -232,7 +232,6 @@ embed{
 
 #footer div a:hover i{
     color: var(--background);
-    /* background: pink; */
 }
 
 #footer #right{
@@ -257,9 +256,9 @@ embed{
     padding: 1.25rem 0px;
 }
 
-.dropdown a:last-of-type{
-    /* border-radius: 0px 0px 10px 10px; */
-}
+/* .dropdown a:last-of-type{
+    border-radius: 0px 0px 10px 10px;
+} */
 
 .dropdownHolder:hover .dropdown{
     display: block !important;
