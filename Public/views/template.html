@@ -25,8 +25,12 @@
     </div>
     <div id="navbar">
         <a href="/" id="title">DataHunt</a>
-        <a id="logout" href="/logout">Logout</a>
-        <a id="profile" href="/profile">{{profile}}</a>
+        <div class="dropdownHolder">
+            <a id="profile" href="/profile">{{profile}}</a>
+            <div class="dropdown" style="left: 25%;">
+                <a id="logout" href="/logout">Logout</a>
+            </div>
+        </div>
         <div class="dropdownHolder">
             <a id="admin" href="/admin">Admin</a>
             <div class="dropdown">
