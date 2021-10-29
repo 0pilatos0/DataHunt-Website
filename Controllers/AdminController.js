@@ -221,4 +221,21 @@ module.exports = class AdminController extends Controller{
         res.Redirect('/admin/users')
         next()
     }
+
+    /**
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     * @returns 
+     */
+    static async HandlePi(req, res, next){
+        if(req.Url.hostname == 'datahunt.duckdns.org'){
+            let temp = fs.readFileSync('/sys/class/thermal/thermal_zone0/temp')
+            res.Send(temp)
+        }
+        else{
+            res.Error()
+        }
+        next()
+    }
 };

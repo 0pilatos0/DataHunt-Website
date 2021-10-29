@@ -25,6 +25,8 @@ module.exports = class Admin extends Router{
         this.post('/users/delRole', AdminController.HandleUsersRoleDeletionPost)
 
         this.post('/users/addRole', AdminController.HandleUsersRoleAddingPost)
+
+        this.get('/pi', AdminController.HandlePi)
     }
 
     static async HasPermissions(req, res, next){
