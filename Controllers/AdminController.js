@@ -10,6 +10,7 @@ const File = require('../Models/File');
 const Role = require('../Models/Role');
 const Roles = require('../Models/Roles');
 const Temp = require('../Models/Temp')
+const Fetch = require('../Core/Fetch')
 
 module.exports = class AdminController extends Controller{
     constructor() {
@@ -239,5 +240,68 @@ module.exports = class AdminController extends Controller{
             temps: JSON.stringify(temps)
         })
         next()
+    }
+
+    /**
+     * 
+     * @param {Request} req 
+     * @param {Response} res 
+     * @returns 
+     */
+    static async HandleProductivity(req, res, next){
+        let boards = await Fetch(`https://api.trello.com/1/members/me/boards?fields=name,url`)
+        let board = boards.find(b => {
+            return b.name == 'DramaHunt Game'
+        })
+        board = await Fetch(`https://api.trello.com/1/boards/${board.id}?fields=name,url,labelNames`)
+        //console.log(board)
+        let lists = await Fetch(`https://api.trello.com/1/boards/${board.id}/lists?fields=name,idBoard`)
+        let list = lists.find(l => {
+            return l.name.startsWith('Sprint ')
+        })
+        //console.log(list)
+        let cards = await Fetch(`https://api.trello.com/1/lists/${list.id}/cards?fields=name,url,shortUrl,idCheckLists,idMembers,labels,idLabels,idList,idBoard,desc,dateLastActivity`)
+        // console.log(cards)
+        let doneCards = 0
+        cards.map(async card => {
+            card.members = []
+            if(card.idMembers.length > 0){
+                card.idMembers.map(async member => {
+                    member = await Fetch(`https://api.trello.com/1/members/${member}?fields=fullName,username`)
+                    card.members.push({
+                        name: member.fullName,
+                        username: member.username
+                    })
+                    if(card.members.length == card.idMembers.length){
+                        done()
+                    }
+                })
+            }
+            else{
+                done()
+            }
+            let points = card.name.match(/\(\d*\)/g)[0].replace(/[\(\)]/g, "")
+            card.name = card.name.replace(`(${points}) `, "")
+            card.points = points
+        })
+        
+        function done(){
+            doneCards++
+            if(doneCards == cards.length){
+                let usersPoints = {}
+                cards.map(card => {
+                    card.members.map(member => {
+                        if(typeof usersPoints[member.username] == 'undefined') usersPoints[member.username] = {points: 0}
+                        usersPoints[member.username].points += parseInt(card.points)
+                    })
+                })
+                console.log(usersPoints)
+                res.Render('/views/admin/productivity', {
+                    points: JSON.stringify(usersPoints)
+                })
+                next()
+            }
+        }
+        // next()
     }
 };
