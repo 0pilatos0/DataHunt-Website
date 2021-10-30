@@ -9,6 +9,7 @@ const path = require('path');
 const File = require('../Models/File');
 const Role = require('../Models/Role');
 const Roles = require('../Models/Roles');
+const Temp = require('../Models/Temp')
 
 module.exports = class AdminController extends Controller{
     constructor() {
@@ -229,13 +230,14 @@ module.exports = class AdminController extends Controller{
      * @returns 
      */
     static async HandlePi(req, res, next){
-        if(req.Url.hostname == 'datahunt.duckdns.org'){
-            let temp = fs.readFileSync('/sys/class/thermal/thermal_zone0/temp')
-            res.Send(temp)
-        }
-        else{
-            res.Error()
-        }
+        let temps = await Temp.Select({
+            limit: 10,
+            orderBy: 'ORDER BY id DESC'
+        })
+        temps = temps.reverse()
+        res.Render('/views/admin/pi', {
+            temps: JSON.stringify(temps)
+        })
         next()
     }
 };

@@ -1,1 +1,66 @@
-<div>{{temp}}</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div>
+    <h1>Temps of Raspberry Pi</h1>
+    <canvas id="tempsChart"></canvas>
+</div>
+
+<script>
+    let labels = []
+    let data = []
+
+    let temps = {{temps}}
+
+    temps.map(temp => {
+        labels.push(`${new Date(temp.created_at).toLocaleDateString()} ${new Date(temp.created_at).toLocaleTimeString()}`)
+        data.push(temp.temp)
+    })
+
+    const config = {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'temp in °C',
+                    backgroundColor: getComputedStyle(document.body).getPropertyValue('--accent'),
+                    borderColor: getComputedStyle(document.body).getPropertyValue('--extra'),
+                    data,
+                }
+            ]
+        },
+        options: {
+            interaction: {
+                mode: 'index',
+                intersect:false
+            },
+            plugins: {
+                tooltip:{
+                    position: 'nearest',
+                }
+            },
+            color: getComputedStyle(document.body).getPropertyValue('--font'),
+            responsive: true,
+            scales: {
+                xAxes: {
+                    ticks: {
+                        color: getComputedStyle(document.body).getPropertyValue('--font')
+                    },
+                    grid: {
+                        color: getComputedStyle(document.body).getPropertyValue('--background')
+                    }
+                },
+                yAxes: {
+                    ticks: {
+                        color: getComputedStyle(document.body).getPropertyValue('--font')
+                    },
+                    grid: {
+                        color: getComputedStyle(document.body).getPropertyValue('--background')
+                    }
+                }
+            }
+        }
+    }
+
+    new Chart(tempsChart, config)
+</script>
