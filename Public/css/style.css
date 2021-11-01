@@ -353,3 +353,7 @@ form div{
     max-height: 1rem;
     image-rendering: pixelated;
 }
+
+#tempsChart{
+    max-height: calc(100vh - 2.5rem - 1.5rem - 1.5rem - 4rem);
+}
