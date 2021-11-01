@@ -164,7 +164,7 @@ module.exports = class AccountController extends Controller{
             errors.map(error => {
                 req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, error))
             })
-            res.Redirect('/login')
+            res.Redirect(`${req.Url.pathname}${req.Url.search}`)
         }
         if(req.data.email == ""){
             errors.push(`Email can't be empty`)
