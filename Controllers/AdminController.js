@@ -113,7 +113,7 @@ module.exports = class AdminController extends Controller{
         let doneUsers = 0
         users.map(async user => {
             let dataString = ""
-            dataString += '<tr>'
+            dataString += `<tr id="${user.id}">`
             dataString += `<td>${user.username}</td>`
             let assignedRoles = await Role.Select({
                 joins: [
@@ -126,7 +126,8 @@ module.exports = class AdminController extends Controller{
             })
             let parsedAssignedRoles = []
             assignedRoles.map(role => {
-                parsedAssignedRoles.push(`${role.name}<form method="POST" action="/admin/users/delRole"><input type="hidden" value="${role.id}" name="id"><button>x</button></form>`)
+
+                parsedAssignedRoles.push(`<p>${role.name}</p><button id="delete-confirm-${user.id}" class="delete-button">x</button>`)
             })
             dataString += `<td>${parsedAssignedRoles.join(', ')}</td>`
             dataString += `<td><select id="${user.username}-select"><option value="">Select one</option>`
@@ -147,11 +148,30 @@ module.exports = class AdminController extends Controller{
                     //window.location.href = window.location.href + '/addRole?id=' + ${user.username}select.value + '&user=${user.id}'
                     ${user.username}role.value = ${user.username}select.value
                     ${user.username}form.submit()
-                }) 
+                })
             `
             doneUsers++
             if(doneUsers == maxUsers || doneUsers == users.length){
                 script += '</script>'
+                script += `<script type="module">
+                import Modal from '/js/Modals/Modal.js'
+        
+        let buttonArray = document.getElementsByClassName("delete-button");
+                console.log(buttonArray);
+        Array.from(buttonArray).forEach(button => {
+            button.onclick = function(){
+            console.log(button);
+                let id = button.parentElement.parentElement.id;
+                let name = button.parentElement.parentElement.firstChild.innerHTML;
+                let role = button.parentElement.firstChild.innerHTML;
+                let titleText = "Remove role";
+                let bodyText = \`Remove \${role} from \${name}?\`
+                let confirm = '<button type="button" class="btn btn-primary" id="modalConfirm">Confirm</button>'
+               
+                Modal.Confirm(id, name, titleText, bodyText, confirm);
+            }
+        })
+    </script>`
                 res.Render('/views/admin/users', {
                     head: `<th>Username</th><th>Roles</th><th>Add role</th>`,
                     body,
