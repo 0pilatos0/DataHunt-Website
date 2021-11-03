@@ -472,7 +472,7 @@ module.exports = class AccountController extends Controller{
         errors.map(error => {
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, error))
         })
-        res.Redirect('/forgotpassword')
+        res.Redirect(req.Url.pathname)
         next()
     }
 };
