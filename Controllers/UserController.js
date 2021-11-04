@@ -48,32 +48,37 @@ module.exports = class UserController extends Controller{
      * @returns 
      */
     static async HandleProfilePicturePost(req, res, next){
-        let profilePictureID = await ProfilePicture.FindId({
-            where: {
-                user_id: req.session.user.id
-            }
-        })
-        if(profilePictureID == false){
-            await ProfilePicture.Create({
-                create: {
-                    user_id: req.session.user.id,
-                    image: req.data.picture
-                }
-            })
-            req.session.user.profilePicture = req.data.picture
-            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully uploaded your profile picture`))
+        if(req.data.picture == ""){
+            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, `You can't upload an empty profile picture`))
         }
         else{
-            await ProfilePicture.Update({
+            let profilePictureID = await ProfilePicture.FindId({
                 where: {
                     user_id: req.session.user.id
-                },
-                set: {
-                    image: req.data.picture
                 }
             })
-            req.session.user.profilePicture = req.data.picture
-            req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully changed your profile picture`))
+            if(profilePictureID == false){
+                await ProfilePicture.Create({
+                    create: {
+                        user_id: req.session.user.id,
+                        image: req.data.picture
+                    }
+                })
+                req.session.user.profilePicture = req.data.picture
+                req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully uploaded your profile picture`))
+            }
+            else{
+                await ProfilePicture.Update({
+                    where: {
+                        user_id: req.session.user.id
+                    },
+                    set: {
+                        image: req.data.picture
+                    }
+                })
+                req.session.user.profilePicture = req.data.picture
+                req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully changed your profile picture`))
+            }
         }
         res.Redirect('/profile')
         next()

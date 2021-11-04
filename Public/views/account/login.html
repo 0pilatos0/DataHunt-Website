@@ -15,23 +15,12 @@
         <input type="checkbox" name="rememberme">
     </div>
     <div>
-        <button id="forgotPassword">Forgot password</button>
-        <button type="submit">Login</button>
+        <button type="submit" style="float: right;">Login</button>
+        <button id="forgotPassword" style="float: left;">Forgot password</button>
     </div>
 </form>
 
 <script>
-    window.onkeypress = (e) => {
-        switch (e.key) {
-            case "Enter":
-                e.preventDefault()
-                form.submit()
-                break;
-            default:
-                break;
-        }
-    }
-
     forgotPassword.onclick = (e) => {
         e.preventDefault()
         window.location.href = '/login/forgotpassword'

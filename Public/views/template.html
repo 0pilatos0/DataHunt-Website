@@ -20,19 +20,28 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <div id="loader-div">
+        <i class="fas fa-spinner fa-10x"></i>
+    </div>
     <div id="feedback-div">
         {{feedback}}
     </div>
     <div id="navbar">
         <a href="/" id="title">DataHunt</a>
-        <a id="logout" href="/logout">Logout</a>
-        <a id="profile" href="/profile">{{profile}}</a>
+        <div class="dropdownHolder">
+            <a id="profile" href="/profile">{{profile}}</a>
+            <div class="dropdown" style="left: 25%;">
+                <a id="logout" href="/logout">Logout</a>
+            </div>
+        </div>
         <div class="dropdownHolder">
             <a id="admin" href="/admin">Admin</a>
             <div class="dropdown">
                 <a href="/admin/users">Users</a>
                 <a href="/admin/files">Opleveringsdocument</a>
                 <a href="/admin/upload">PDF upload</a>
+                <a href="/admin/pi">Raspbery Pi</a>
+                <a href="/admin/productivity">Productivity</a>
             </div>
         </div>
         <a id="login" href="/login">Login</a>
@@ -100,6 +109,20 @@
                     breadcrumb.innerHTML += pageTitle.innerText
                 }
             }
+        })
+
+        let buttonSubmits = document.querySelectorAll('button[type="submit"]')
+        Array.from(buttonSubmits).map(button => {
+            button.addEventListener('click', () => {
+                document.getElementById('loader-div').style.display = "block"
+            })
+        })
+
+        let urls = document.querySelectorAll('a')
+        Array.from(urls).map(url => {
+            url.addEventListener('click', () => {
+                document.getElementById('loader-div').style.display = "block"
+            })
         })
     </script>
 </body>

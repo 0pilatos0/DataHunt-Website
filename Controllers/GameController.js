@@ -17,12 +17,11 @@ module.exports = class GameController extends Controller{
      * @returns 
      */
     static async HandleGame(req, res, next){
-        let gameHTML = HTMLLoader.Read(`${__dirname}/../../../../../game-runner/_work/DataHunt-Game/DataHunt-Game/index.html`).html
-        if(gameHTML == ''){
-            res.Error()
+        if(req.Url.hostname == 'datahunt.duckdns.org'){
+            res.Send(HTMLLoader.Read(`${__dirname}/../../../../../game-runner/_work/DataHunt-Game/DataHunt-Game/index.html`).html)
         }
         else{
-            res.Send(gameHTML);
+            res.Error()
         }
         next()
     }
