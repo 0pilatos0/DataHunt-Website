@@ -17,7 +17,7 @@ export default class Modal{
         });
     }
 
-    static Confirm(id, name, title, body, confirm){
+    static Confirm(name, title, body, confirm, type, action, id, request){
         let data = this.Load("/js/Modals/ModalTemplate.html")
 
         data.then((data) =>{
@@ -26,25 +26,15 @@ export default class Modal{
             data = data.replace("{{CONFIRM}}", confirm)
 
             document.body.insertAdjacentHTML("beforeend", data);
-            let popup = document.createElement('script')
-            popup.innerHTML = `let modal = new bootstrap.Modal(document.getElementById('popupModal'));
-    modal.show();`
-            document.body.appendChild(popup)
+            let modal = new bootstrap.Modal(document.getElementById('popupModal'));
+            modal.show();
+
+            document.getElementById("cancelModal").onclick = function () {
+                document.getElementById("popupModal").remove()
+            };
+
             document.getElementById("modalConfirm").onclick = function(){
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", '/server', true);
-
-//Send the proper header information along with the request
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-                xhr.onreadystatechange = function() { // Call a function when the state changes.
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        // Request finished. Do processing here.
-                    }
-                }
-                xhr.send("foo=bar&lorem=ipsum");
-// xhr.send(new Int8Array());
-// xhr.send(document);
+                eval(request);
             }
         });
 

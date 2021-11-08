@@ -160,15 +160,32 @@ module.exports = class AdminController extends Controller{
                 console.log(buttonArray);
         Array.from(buttonArray).forEach(button => {
             button.onclick = function(){
-            console.log(button);
                 let id = button.parentElement.parentElement.id;
                 let name = button.parentElement.parentElement.firstChild.innerHTML;
                 let role = button.parentElement.firstChild.innerHTML;
                 let titleText = "Remove role";
                 let bodyText = \`Remove \${role} from \${name}?\`
                 let confirm = '<button type="button" class="btn btn-primary" id="modalConfirm">Confirm</button>'
+                let type = 'role';
+                let action = 'delete';
+                
+                let request = \` var xhr = new XMLHttpRequest();
+                xhr.open("POST", './users/delRole', true);
+
+//Send the proper header information along with the request
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                xhr.onreadystatechange = function() { // Call a function when the state changes.
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        
+                    }
+                }
+                xhr.send('action=\${action}&type=\${type}&id=\${id}')
+
+// xhr.send(new Int8Array());
+// xhr.send(document); \`
                
-                Modal.Confirm(id, name, titleText, bodyText, confirm);
+                Modal.Confirm(name, titleText, bodyText, confirm, type, action, id, request);
             }
         })
     </script>`
@@ -189,6 +206,7 @@ module.exports = class AdminController extends Controller{
      * @returns 
      */
     static async HandleUsersRoleDeletionPost(req, res, next){
+        console.log(req);
         let role = await Role.Find({
             where: {
                 "users_roles.id": req.data.id
@@ -207,6 +225,7 @@ module.exports = class AdminController extends Controller{
             }
         })
         req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `Successfully deleted '${role.name}' role from user ${role.username}`))
+        console.log(role);
         res.Redirect('/admin/users')
         next()
     }
