@@ -17,7 +17,7 @@ export default class Modal{
         });
     }
 
-    static Confirm(name, title, body, confirm, type, action, id, request){
+    static Confirm(title, body, confirm, requestLocation, requestData){
         let data = this.Load("/js/Modals/ModalTemplate.html")
 
         data.then((data) =>{
@@ -34,7 +34,21 @@ export default class Modal{
             };
 
             document.getElementById("modalConfirm").onclick = function(){
-                eval(request);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", requestLocation, true);
+
+                //Send the proper header information along with the request
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                xhr.onreadystatechange = function() { // Call a function when the state changes.
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+
+                    }
+                }
+                xhr.send(requestData)
+
+                // xhr.send(new Int8Array());
+                // xhr.send(document);
             }
         });
 

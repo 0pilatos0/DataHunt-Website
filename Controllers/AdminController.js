@@ -127,9 +127,9 @@ module.exports = class AdminController extends Controller{
             let parsedAssignedRoles = []
             assignedRoles.map(role => {
 
-                parsedAssignedRoles.push(`<p>${role.name}</p><button id="delete-confirm-${user.id}" class="delete-button">x</button>`)
+                parsedAssignedRoles.push(`<p id="${role.id}">${role.name}</p><button id="delete-confirm-${user.id}" class="delete-button">x</button>`)
             })
-            dataString += `<td>${parsedAssignedRoles.join(', ')}</td>`
+            dataString += `<td>${parsedAssignedRoles.join('')}</td>`
             dataString += `<td><select id="${user.username}-select"><option value="">Select one</option>`
             allRoles.map(role => {
                 if(!assignedRoles.some(r => r.name == role.name)){
@@ -160,32 +160,17 @@ module.exports = class AdminController extends Controller{
                 console.log(buttonArray);
         Array.from(buttonArray).forEach(button => {
             button.onclick = function(){
-                let id = button.parentElement.parentElement.id;
                 let name = button.parentElement.parentElement.firstChild.innerHTML;
                 let role = button.parentElement.firstChild.innerHTML;
+                let id = button.parentElement.firstChild.id;
+                
                 let titleText = "Remove role";
                 let bodyText = \`Remove \${role} from \${name}?\`
                 let confirm = '<button type="button" class="btn btn-primary" id="modalConfirm">Confirm</button>'
-                let type = 'role';
-                let action = 'delete';
-                
-                let request = \` var xhr = new XMLHttpRequest();
-                xhr.open("POST", './users/delRole', true);
+                let requestLocation = './users/delRole';
+                let requestData = \`id=\${id}\`;
 
-//Send the proper header information along with the request
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-                xhr.onreadystatechange = function() { // Call a function when the state changes.
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        
-                    }
-                }
-                xhr.send('action=\${action}&type=\${type}&id=\${id}')
-
-// xhr.send(new Int8Array());
-// xhr.send(document); \`
-               
-                Modal.Confirm(name, titleText, bodyText, confirm, type, action, id, request);
+                Modal.Confirm(titleText, bodyText, confirm, requestLocation, requestData);
             }
         })
     </script>`
@@ -206,7 +191,7 @@ module.exports = class AdminController extends Controller{
      * @returns 
      */
     static async HandleUsersRoleDeletionPost(req, res, next){
-        console.log(req);
+        console.log(req.data);
         let role = await Role.Find({
             where: {
                 "users_roles.id": req.data.id
