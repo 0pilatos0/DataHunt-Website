@@ -17,13 +17,22 @@ export default class Modal{
         });
     }
 
-    static Confirm(title, body, confirm, requestLocation, requestData){
+    static Confirm(title, body, requestData, confirm, requestLocation){
         let data = this.Load("/js/Modals/ModalTemplate.html")
 
         data.then((data) =>{
             data = data.replace("{{TITLE}}", title)
+            data = data.replace("{{LOCATION}}", requestLocation)
             data = data.replace("{{BODY}}", body)
             data = data.replace("{{CONFIRM}}", confirm)
+
+            let post = "";
+
+            Object.keys(requestData).forEach(key =>{
+                post += `<input type="hidden" name="${key}" value="${requestData[key]}"></input>`;
+            })
+
+            data = data.replace("{{VALUES}}", post)
 
             document.body.insertAdjacentHTML("beforeend", data);
             let modal = new bootstrap.Modal(document.getElementById('popupModal'));
@@ -32,24 +41,7 @@ export default class Modal{
             document.getElementById("cancelModal").onclick = function () {
                 document.getElementById("popupModal").remove()
             };
-
-            document.getElementById("modalConfirm").onclick = function(){
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", requestLocation, true);
-
-                //Send the proper header information along with the request
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-                xhr.onreadystatechange = function() { // Call a function when the state changes.
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-
-                    }
-                }
-                xhr.send(requestData)
-
-                // xhr.send(new Int8Array());
-                // xhr.send(document);
-            }
+            
         });
 
     }

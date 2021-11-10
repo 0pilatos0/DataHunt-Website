@@ -113,7 +113,7 @@ module.exports = class AdminController extends Controller{
         let doneUsers = 0
         users.map(async user => {
             let dataString = ""
-            dataString += `<tr id="${user.id}">`
+            dataString += `<tr>`
             dataString += `<td>${user.username}</td>`
             let assignedRoles = await Role.Select({
                 joins: [
@@ -127,7 +127,7 @@ module.exports = class AdminController extends Controller{
             let parsedAssignedRoles = []
             assignedRoles.map(role => {
 
-                parsedAssignedRoles.push(`<p id="${role.id}">${role.name}</p><button id="delete-confirm-${user.id}" class="delete-button">x</button>`)
+                parsedAssignedRoles.push(`<div><p>${role.name}</p><button id="${role.id}" class="delete-button">x</button></div>`)
             })
             dataString += `<td>${parsedAssignedRoles.join('')}</td>`
             dataString += `<td><select id="${user.username}-select"><option value="">Select one</option>`
@@ -160,17 +160,17 @@ module.exports = class AdminController extends Controller{
                 console.log(buttonArray);
         Array.from(buttonArray).forEach(button => {
             button.onclick = function(){
-                let name = button.parentElement.parentElement.firstChild.innerHTML;
+                let name = button.parentElement.parentElement.parentElement.firstChild.innerHTML;
                 let role = button.parentElement.firstChild.innerHTML;
-                let id = button.parentElement.firstChild.id;
+                let id = button.id;
                 
                 let titleText = "Remove role";
                 let bodyText = \`Remove \${role} from \${name}?\`
-                let confirm = '<button type="button" class="btn btn-primary" id="modalConfirm">Confirm</button>'
+                let confirm = '<button type="submit" class="btn btn-primary" id="modalConfirm">Confirm</button>'
                 let requestLocation = './users/delRole';
-                let requestData = \`id=\${id}\`;
+                let requestData = {"id": id};
 
-                Modal.Confirm(titleText, bodyText, confirm, requestLocation, requestData);
+                Modal.Confirm(titleText, bodyText, requestData, confirm, requestLocation);
             }
         })
     </script>`
