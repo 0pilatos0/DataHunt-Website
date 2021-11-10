@@ -36,11 +36,17 @@ module.exports = class WebServer{
             let sessionID = req.Cookies[Object.keys(req.Cookies).find(c => {
                 return c == process.env.SESSIONCOOKIENAME
             })]
-            let session = this.#sessions[Object.keys(this.#sessions).find(s => {
-                return s == sessionID
-            })]
-            if(typeof session !== "undefined"){
-                req.session = this.#sessions[sessionID]
+            if(typeof sessionID !== 'undefined'){
+                let session = this.#sessions[Object.keys(this.#sessions).find(s => {
+                    return s == sessionID
+                })]
+                if(typeof session !== 'undefined'){
+                    req.session = this.#sessions[sessionID]
+                }
+                else{
+                    this.#sessions[sessionID] = {}
+                    req.session = this.#sessions[sessionID] 
+                }
             }
             else{
                 let sessionID = Helper.RandomString(100)
