@@ -59,7 +59,7 @@ module.exports = class Response{
             `,
             profile 
         })
-        delete this.#req.session.feedback
+        delete this.#req.session.feedback;
         if(!path.extname(pageName)) this.Send(HTMLLoader.Replace(htmlPage.html, htmlPage.vars))
         else console.log("Please don't provide an extension")
     }
