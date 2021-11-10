@@ -42,7 +42,7 @@ export default class Modal{
 
                 xhr.onreadystatechange = function() { // Call a function when the state changes.
                     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-
+                        location.reload()
                     }
                 }
                 xhr.send(requestData)
