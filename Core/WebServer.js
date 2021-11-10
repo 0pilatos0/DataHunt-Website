@@ -49,7 +49,7 @@ module.exports = class WebServer{
                 }
             }
             else{
-                let sessionID = Helper.RandomString(100)
+                sessionID = Helper.RandomString(100)
                 this.#sessions[sessionID] = {}
                 res.CreateCookie(process.env.SESSIONCOOKIENAME, sessionID)
                 req.session = this.#sessions[sessionID] 
