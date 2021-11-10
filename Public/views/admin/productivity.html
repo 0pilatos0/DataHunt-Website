@@ -1,0 +1,70 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div>
+    <h1>Amount of points per developer</h1>
+    <canvas id="pointsChart"></canvas>
+</div>
+
+
+<script>
+    let labels = []
+    let data = []
+
+    let points = {{points}}
+
+    Object.keys(points).map(name => {
+        console.log(name)
+        let user = points[name]
+        labels.push(name)
+        data.push(user.points)
+    })
+
+    const config = {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'Total points at current sprint',
+                    backgroundColor: getComputedStyle(document.body).getPropertyValue('--accent'),
+                    borderColor: getComputedStyle(document.body).getPropertyValue('--extra'),
+                    data,
+                }
+            ]
+        },
+        options: {
+            interaction: {
+                mode: 'index',
+                intersect:false
+            },
+            plugins: {
+                tooltip:{
+                    position: 'nearest',
+                }
+            },
+            color: getComputedStyle(document.body).getPropertyValue('--font'),
+            responsive: true,
+            scales: {
+                xAxes: {
+                    ticks: {
+                        color: getComputedStyle(document.body).getPropertyValue('--font')
+                    },
+                    grid: {
+                        color: getComputedStyle(document.body).getPropertyValue('--background')
+                    }
+                },
+                yAxes: {
+                    min: 0,
+                    ticks: {
+                        color: getComputedStyle(document.body).getPropertyValue('--font')
+                    },
+                    grid: {
+                        color: getComputedStyle(document.body).getPropertyValue('--background')
+                    }
+                }
+            }
+        }
+    }
+
+    new Chart(pointsChart, config)
+</script>

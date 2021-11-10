@@ -1,9 +1,11 @@
 const http = require('http')
-const HTMLLoader = require('../Loaders/HtmlLoader')
+const HTMLLoader = require('../Loaders/HTMLLoader')
 const path = require('path')
 const fs = require('fs')
 const Feedback = require('../Core/Feedback/Feedback');
 const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
+const Utils = require('./Utils');
+const ProfilePicture = require('../Models/ProfilePicture')
 
 module.exports = class Response{
     #res
@@ -20,7 +22,7 @@ module.exports = class Response{
 
     Redirect(url){
         this.#res.writeHead(302, {
-            Location: `http://${process.env.HOST}:${process.env.PORT}${url}`
+            Location: `${Utils.URL}${url}`
         })
     }
 
@@ -34,17 +36,30 @@ module.exports = class Response{
     }
 
     Render(pageName, vars = {}){
-        let templatePage = HTMLLoader.Read(`${__dirname}/../public/views/template.html`)
-        let htmlPage = HTMLLoader.Read(`${__dirname}/../public${pageName}.html`)
+        let templatePage = HTMLLoader.Read(`${__dirname}/../Public/views/template.html`)
+        let htmlPage = HTMLLoader.Read(`${__dirname}/../Public${pageName}.html`)
         Object.keys(vars).map(v => {
             htmlPage.vars[v] = vars[v]
         })
-        if(!this.#req.session.feedback) this.#req.session.feedback = []
+        let profile = '<i class="far fa-user"></i>'
+        if(this.#req.session.user?.profilePicture){
+            profile = `<img id="profilePicture" src="${this.#req.session.user.profilePicture}">`
+        }
         htmlPage.html = HTMLLoader.Replace(templatePage.html, {
             body: htmlPage.html,
-            feedback: this.#req.session.feedback.join("")
+            feedback: this.#req.session.feedback?.join(""),
+            code: `
+                <script>
+                    ${this.#req.session.user ? "" : `document.getElementById("profile").style.display = "none"`}
+                    ${this.#req.session.user ? "" : `document.getElementById("logout").style.display = "none"`}
+                    ${this.#req.session.user ? `document.getElementById("login").style.display = "none"` : ""}
+                    ${this.#req.session.user ? `document.getElementById("register").style.display = "none"` : ""}
+                    ${this.#req.session.user?.roles.indexOf("admin") > -1 ? "" : `document.getElementById("admin").style.display = "none"` }
+                </script>
+            `,
+            profile 
         })
-        delete this.#req.session.feedback
+        delete this.#req.session.feedback;
         if(!path.extname(pageName)) this.Send(HTMLLoader.Replace(htmlPage.html, htmlPage.vars))
         else console.log("Please don't provide an extension")
     }
@@ -68,5 +83,9 @@ module.exports = class Response{
     Error(){
         this.Render('/views/404')
         this.End()
+    }
+
+    WriteHead(statusCode, content){
+        this.#res.writeHead(statusCode, content)
     }
 }

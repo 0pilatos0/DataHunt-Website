@@ -1,14 +1,19 @@
 const UserController = require("../Controllers/UserController");
-const Route = require("../Core/Route");
+const Router = require("../Core/Router");
+const Account = require("./Account");
 
-module.exports = class User extends Route{
+module.exports = class User extends Router{
     constructor() {
-        super('')
+        super('/profile')
 
-        this.get('/verify', UserController.HandleVerification)
+        this.use(Account.Authenticated)
 
-        this.get('/resetpassword', UserController.HandlePasswordReset)
+        this.get('', UserController.HandleProfile)
 
-        this.post('/resetpassword', UserController.HandlePasswordResetPost)
+        this.post('/profilePicture', UserController.HandleProfilePicturePost)
+
+        this.post('/changeAccount', UserController.HandleChangeAccountPost)
+
+        this.get('/deleteProfilePicture', UserController.HandleDeleteProfilePicture)
     }
 }

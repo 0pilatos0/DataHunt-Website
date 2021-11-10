@@ -3,6 +3,7 @@ const http = require('http')
 module.exports = class Request{
     #req
     session = {}
+    data = {}
 
     /**
      * 
@@ -43,5 +44,9 @@ module.exports = class Request{
             parsedCookies[splittedCookie[0].trim()] = splittedCookie[1].trim()
         })
         return parsedCookies
+    }
+
+    On(event, callback){
+        this.#req.on(event, callback)
     }
 }

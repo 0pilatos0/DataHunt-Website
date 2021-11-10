@@ -1,0 +1,28 @@
+<form action="" method="POST" id="form" class="customForm">
+    <div>
+        <h1>Login:</h1>
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <input type="text" name="email" value="{{email}}">
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" name="password">
+    </div>
+    <div>
+        <label for="rememberme">Remember me:</label>
+        <input type="checkbox" name="rememberme">
+    </div>
+    <div>
+        <button type="submit" style="float: right;">Login</button>
+        <button id="forgotPassword" style="float: left;">Forgot password</button>
+    </div>
+</form>
+
+<script>
+    forgotPassword.onclick = (e) => {
+        e.preventDefault()
+        window.location.href = '/login/forgotpassword'
+    }
+</script>

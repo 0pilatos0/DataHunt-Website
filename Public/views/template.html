@@ -15,13 +15,124 @@
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <!-- styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style.css">
+
 </head>
 <body>
-<div id="feedback-div">
-    {{feedback}}
-</div>
-    {{body}}
+    <div id="loader-div">
+        <i class="fas fa-spinner fa-10x"></i>
+    </div>
+    <div id="feedback-div">
+        {{feedback}}
+    </div>
+    <div id="modal-div">
+    </div>
+    <div id="navbar">
+        <a href="/" id="title">DataHunt</a>
+        <div class="dropdownHolder">
+            <a id="profile" href="/profile">{{profile}}</a>
+            <div class="dropdown" style="left: 25%;">
+                <a id="logout" href="/logout">Logout</a>
+            </div>
+        </div>
+        <div class="dropdownHolder">
+            <a id="admin" href="/admin">Admin</a>
+            <div class="dropdown">
+                <a href="/admin/users">Users</a>
+                <a href="/admin/files">Opleveringsdocument</a>
+                <a href="/admin/upload">PDF upload</a>
+                <a href="/admin/pi">Raspbery Pi</a>
+                <a href="/admin/productivity">Productivity</a>
+            </div>
+        </div>
+        <a id="login" href="/login">Login</a>
+        <a id="register" href="/register">Register</a>
+        <script>if(window.location.host == "datahunt.duckdns.org"){document.write('<a href="/game">Game</a>')}</script>
+    </div>
+    <div id="breadcrumb"></div>
+    <div id="body">{{body}}</div>
+    <div id="footer"><div id="left"></div><div id="middle">DataHunt &copy; <script>document.write(new Date().getFullYear())</script></div><div id="right"><a href="https://github.com/0pilatos0/DataHunt-Website"><i class="fab fa-github"></i></a></div></div>
+    {{code}}
+    <script>
+        let aTags = document.querySelectorAll('a')
+        aTags.forEach(a => {
+            if(a.href == window.location.href){
+                a.classList.add('currentPage')
+                a.onclick = () => {return false}
+            }
+        })
+
+        let passwordInputs = document.querySelectorAll('input[type="password"]')
+        Array.from(passwordInputs).map(input => {
+            let eyeHolder = document.createElement('i')
+            eyeHolder.classList.add('fas')
+            eyeHolder.classList.add('fa-eye')
+            eyeHolder.classList.add('eye')
+            eyeHolder.onclick = () => {
+                if(eyeHolder.classList.contains('fa-eye')){
+                    eyeHolder.classList.remove('fa-eye')
+                    eyeHolder.classList.add('fa-eye-slash')
+                    input.type = 'text'
+                }
+                else{
+                    eyeHolder.classList.add('fa-eye')
+                    eyeHolder.classList.remove('fa-eye-slash')
+                    input.type = 'password'
+                }
+            }
+            input.parentElement.insertAdjacentElement('beforeend', eyeHolder)
+        })
+
+        let breadcrumbPieces = window.location.pathname.slice(1).split('/')
+        let breadcrumbString = ''
+        breadcrumbPieces.map(piece => {
+            breadcrumbString += `/${piece}`
+            let aTag = document.querySelector(`a[href="${breadcrumbString}"]`)
+            if(breadcrumbPieces.indexOf(piece) != breadcrumbPieces.length - 1){
+                let button = document.createElement('a')
+                button.href = breadcrumbString
+                if(aTag != null){
+                    button.innerHTML = piece == '' ? '<i class="fas fa-home"></i>' : aTag.innerHTML
+                }
+                else{
+                    let pageTitle = document.querySelector('h1')
+                    button.innerHTML = piece == '' ? '<i class="fas fa-home"></i>' : pageTitle.innerText
+                }
+                breadcrumb.insertAdjacentElement('beforeend', button)
+                breadcrumb.innerHTML += ` > `
+            }
+            else{
+                if(aTag != null){
+                    breadcrumb.innerHTML += aTag.innerHTML
+                }
+                else{
+                    let pageTitle = document.querySelector('h1')
+                    breadcrumb.innerHTML += pageTitle.innerText
+                }
+            }
+        })
+
+        let buttonSubmits = document.querySelectorAll('button[type="submit"]')
+        Array.from(buttonSubmits).map(button => {
+            button.addEventListener('click', () => {
+                document.getElementById('loader-div').style.display = "block"
+            })
+        })
+
+        let urls = document.querySelectorAll('a')
+        Array.from(urls).map(url => {
+            url.addEventListener('click', () => {
+                document.getElementById('loader-div').style.display = "block"
+            })
+        })
+
+        document.getElementById('loader-div').style.display = "block"
+
+        window.addEventListener('load', () => {
+            document.getElementById('loader-div').style.display = "none"
+        })
+    </script>
 </body>
 </html>

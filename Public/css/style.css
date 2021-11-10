@@ -1,37 +1,140 @@
+:root {
+    --accent: #00ABE7;
+    --extra: #0081AF;
+    --font: #FBFEF9;
+    --background: #333;
+}
+
 *{
+    color: var(--font);
     font-family: 'Roboto', sans-serif;
 }
 
 body{
-    background-color: #CCCCCC;
-}
-.resetPasswordForm{
-    width: 100%;
-    max-width: 600px;
-    background-color: #F2F2F2;
-    margin: 0 auto;
-    border-radius: 15px;
-    padding: 20px;
-    text-align: center;
-    margin-top: 100px;
-}
-.resetPasswordForm h1{
-    color: black;
-    font-weight: 700;
-    font-size: 50px;
-}
- .resetPasswordForm #email{
-    text-align: center;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    font-size: 2rem;
+    margin: 0;
+    background: var(--background);
+    min-height: 100vh;
+    overflow: hidden;
 }
 
-.resetPasswordForm hr{
+button{
+    background: var(--accent);
+    border: none;
+    padding: 2.5px 10px;
+    transition: background-color 0.5s;
+}
+
+button:hover{
+    color: var(--background);
+    background: var(--extra);
+    border: none;
+}
+
+#navbar{
+    background: var(--accent);
+    height: 2.5rem;
+    width: 100vw;
+    align-items: center;
+    margin: auto;
+}
+
+#navbar a{
+    display: inline-grid;
+    padding: 0 1rem;
+    height: 2.5rem;
+    color: var(--font);
+    text-decoration: none;
+    font-size: 1.25rem;
+    margin: auto;
+    text-align: center;
+    align-content: center;
+    float: right;
+    transition: background-color 0.5s;
+}
+
+#navbar a:hover{
+    color: var(--background);
+    background: var(--extra);
+}
+
+#navbar #title{
+    float: left;
+    font-weight: bold;
+}
+
+#navbar #profilePicture{
+    image-rendering: pixelated;
+    max-height: 2rem;
+}
+
+#navbar div{
+    height: 100%;
+    display: inline-block;
+    float: right;
+}
+
+#currentProfilePicture{
+    image-rendering: pixelated;
+    height: 10rem;
+    max-height: 10rem;
+}
+
+#pictureOutputHolder{
+    max-width: 25rem;
+    max-height: 25rem;
+}
+
+.customForm div input[type=checkbox]{
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.customForm{
+    width: 25rem;
+}
+
+.customForm div{
+    width: 100%;
+    padding-top: 0.5rem;
+}
+
+.customForm div label{
+    padding-right: 0.5rem;
+}
+
+select, option{
     color: black;
-    height: 3px;
-    width: 60%;
+}
+
+.customForm div input[type=file]{
+    color: white;
+}
+
+.customForm div input{
+    height: 1.5rem;
+    width: 12.5rem;
+    color: black;
+    float: right;
+}
+
+.customForm div h1{
+    width: 90vw;
+}
+
+.customForm div button:last-of-type{
+    float: right;
+}
+
+.customForm div button{
+    align-content: center;
+}
+
+#body{
+    box-sizing: border-box;
+    max-width: calc(100vw - 100px);
     margin: 0 auto;
+    min-height: calc(100vh - 2.5rem - 1.5rem - 1.5rem);
+    max-height: calc(100vh - 2.5rem - 1.5rem - 1.5rem);
 }
 
 /*feedback*/
@@ -44,15 +147,31 @@ body{
 }
 #feedback{
     position: relative;
-    font-family: 'Odibee Sans', cursive;
+    display: inline-flex;
+    /* font-family: 'Odibee Sans', cursive; */
     font-size: 2.5rem;
-    padding: 10px 50px;
+    padding: 10px 50px 2px;
     margin-top: 10px;
     min-width: 60vw;
     text-align: center;
     border-radius: 10px;
-
+    align-content: center;
     animation: apear-and-disapear 5s linear ;
+}
+
+#feedback p{
+    text-align: center;
+    width: 100%;
+}
+
+#feedback button{
+    position: absolute;
+    right: 1rem;
+    transition: none;
+}
+
+#feedback button:hover{
+    background: none;
 }
 
 .feedback-error{
@@ -64,7 +183,6 @@ body{
 }
 
 @keyframes apear-and-disapear{
-
     0%{
         top: -200px;
     }
@@ -83,24 +201,187 @@ body{
         top: 10px;
         opacity: 0%;
     }
-
-
 } 
 
-.resetPasswordForm button[type="submit"]{
-    background-color: #7F7F7F;
-    color: white;
-    border: none;
-    padding: 10px;
-    font-size: 1.5rem;
-    border-radius: 5px;
-    margin-top: 10px;
+embed{
+    width: 100%;
+    box-sizing: border-box;
+    height: calc(100vh - 2.5rem - 1.5rem - 1.5rem);
+}
+
+#footer{
+    bottom: 0;
+    background: var(--accent);
+    text-align: center;
+    height: 1.5rem;
+    font-size: 1rem;
+    display: flex;
+    width: 100%;
+    padding: 0px 1rem;
+}
+
+#footer div{
+    width: calc(100% / 3);
+    text-align: center;
+}
+
+#footer div a{
+    text-decoration: none;
 
 }
 
-.resetPasswordForm input[type="password"]{
-    
-    font-size: 1.25em;
-    border-radius: 0.25rem;
-    text-align: center;
+#footer div a:hover i{
+    color: var(--background);
+}
+
+#footer #right{
+    text-align: right;
+}
+
+.dropdown{
+    position: absolute;
+    top: 2.5rem;
+    min-width: 100%;
+    background: var(--accent);
+    min-height: 100%;
+    height: auto !important;
+    /* border-radius: 0px 0px 10px 10px; */
+    display: none !important;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.dropdown a{
+    width: 100%;
+    padding: 1.25rem 0px;
+}
+
+/* .dropdown a:last-of-type{
+    border-radius: 0px 0px 10px 10px;
+} */
+
+.dropdownHolder:hover .dropdown{
+    display: block !important;
+}
+
+.dropdownHolder{
+    position: relative;
+    z-index: 10001;
+}
+
+#currentProfilePictureHolder #deleteProfilePicture{
+    position: absolute;
+    right: 0.25rem;
+    top: 0.1rem;
+    display: none;
+}
+
+#currentProfilePictureHolder #deleteProfilePicture i{
+    color: red;
+}
+
+#currentProfilePictureHolder:hover #currentProfilePictureColor, #currentProfilePictureHolder:hover #deleteProfilePicture{
+    display: unset;
+}
+
+#currentProfilePictureHolder{
+    position: relative;
+    height: 10rem;
+    width: 10rem;
+}
+
+#currentProfilePictureColor{
+    background: rgba(255, 255, 255, 0.5);
+    width: 10rem;
+    height: 10rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+#changeAccountHolder{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#profileHolder{
+    position: relative;
+}
+
+.currentPage{
+    background: var(--font) !important;
+    color: var(--accent) !important;
+}
+
+.currentPage i{
+    color: var(--accent) !important;
+}
+
+.eye{
+    position: absolute;
+    right: .4rem;
+    color: var(--background);
+    top: 0.75rem;
+    width: 1rem;
+    height: 1rem;
+    max-width: 1rem;
+    max-height: 1rem;
+}
+
+form div{
+    position: relative;
+}
+
+#breadcrumb{
+    background: var(--extra);
+    padding: 0px 2.5rem;
+    max-height: 1.5rem;
+}
+
+#breadcrumb a{
+    text-decoration: none;
+    color: var(--font);
+}
+
+#breadcrumb a:hover{
+    color: var(--background);
+}
+
+#breadcrumb #profilePicture{
+    max-height: 1rem;
+    image-rendering: pixelated;
+}
+
+#tempsChart, #pointsChart{
+    max-height: calc(100vh - 2.5rem - 1.5rem - 1.5rem - 4rem);
+}
+
+/* loader */
+#loader-div{
+    background: var(--background);
+    opacity: 0.5;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    display: none;
+    z-index: 99999999999;
+}
+
+#loader-div i{
+    position: relative;
+    left: 45vw;
+    top: 45vh;
+    transform: translate(-50%, -50%);
+    animation: loader infinite linear 0.6s;
+}
+
+@keyframes loader{
+    0% {
+        transform: rotate(0deg); 
+    } 
+    100%{
+        transform: rotate(360deg);
+    }
 }
