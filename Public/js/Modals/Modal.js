@@ -41,7 +41,7 @@ export default class Modal{
             document.getElementById("cancelModal").onclick = function () {
                 document.getElementById("popupModal").remove()
             };
-            
+
         });
 
     }
