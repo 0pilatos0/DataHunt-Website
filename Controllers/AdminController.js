@@ -295,7 +295,7 @@ module.exports = class AdminController extends Controller{
                         usersPoints[member.username].points += parseInt(card.points)
                     })
                 })
-                console.log(usersPoints)
+                // console.log(usersPoints)
                 res.Render('/views/admin/productivity', {
                     points: JSON.stringify(usersPoints)
                 })
