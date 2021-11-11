@@ -123,6 +123,10 @@
 
         let urls = document.querySelectorAll('a')
         Array.from(urls).map(url => {
+            if(url.href == location.href) {
+                url.style.cursor = 'default'
+                return
+            }
             url.addEventListener('click', () => {
                 document.getElementById('loader-div').style.display = "block"
             })
@@ -133,6 +137,8 @@
         window.addEventListener('load', () => {
             document.getElementById('loader-div').style.display = "none"
         })
+
+        window.onunload = () => {}
     </script>
 </body>
 </html>
