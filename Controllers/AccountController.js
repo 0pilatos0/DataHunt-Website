@@ -334,7 +334,7 @@ module.exports = class AccountController extends Controller{
      */
     static async HandlePasswordResetPost(req, res, next){
         const passwordMessage = 'must contain 1 uppercase, 1 lowercase, 1 number and 1 special character'
-        errors = []
+        let errors = []
         let success = []
         if(req.data.password != ''){
             if(!Regex.Password.test(req.data.password)){
