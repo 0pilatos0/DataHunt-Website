@@ -334,7 +334,7 @@ module.exports = class AccountController extends Controller{
      */
     static async HandlePasswordResetPost(req, res, next){
         const passwordMessage = 'must contain 1 uppercase, 1 lowercase, 1 number and 1 special character'
-        errors = []
+        let errors = []
         let success = []
         if(req.data.password != ''){
             if(!Regex.Password.test(req.data.password)){
@@ -445,7 +445,7 @@ module.exports = class AccountController extends Controller{
                             }
                         })
                         let htmlData = HTMLLoader.Read("./Mail/resetPasswordMail.html").html
-                        htmlData = htmlData.replace('{{url}}', `http://${process.env.HOST}:${process.env.PORT}/resetpassword?token=${token}`)
+                        htmlData = htmlData.replace('{{url}}', `http://${process.env.HOST}${process.env.PORT != 80 && process.env.PORT != 8080 ? `:${process.env.PORT}` : ""}/resetpassword?token=${token}`)
                         htmlData = htmlData.replace('{{username}}', user.username)
                         let mailState = await Mailer.SendMail({
                             to: user.email,
