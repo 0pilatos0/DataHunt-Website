@@ -4,12 +4,11 @@ const Feedback = require('../Core/Feedback/Feedback');
 const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
 const Request = require('../Core/Request');
 const Response = require('../Core/Response');
-const fs = require('fs');
 const path = require('path');
-const File = require('../Models/File');
-const Role = require('../Models/Role');
-const Roles = require('../Models/Roles');
-const Temp = require('../Models/Temp')
+const File = require('../Database/Models/File');
+const Users_Role = require('../Database/Models/Users_Role');
+const Role = require('../Database/Models/Role');
+const Pi_Temp = require('../Database/Models/Pi_Temp')
 const Fetch = require('../Core/Fetch')
 
 module.exports = class AdminController extends Controller{
@@ -107,7 +106,7 @@ module.exports = class AdminController extends Controller{
         let users = await User.Select({
             limit: `${maxUsers} OFFSET 0`
         })
-        let allRoles = await Roles.Select({
+        let allRoles = await Role.Select({
             select: ["name", "id"]
         })
         let body = ''
@@ -117,7 +116,7 @@ module.exports = class AdminController extends Controller{
             let dataString = ""
             dataString += `<tr>`
             dataString += `<td>${user.username}</td>`
-            let assignedRoles = await Role.Select({
+            let assignedRoles = await Users_Role.Select({
                 joins: [
                     "INNER JOIN roles ON users_roles.role_id = roles.id"
                 ],
@@ -194,7 +193,7 @@ module.exports = class AdminController extends Controller{
      */
     static async HandleUsersRoleDeletionPost(req, res, next){
         console.log(req.data);
-        let role = await Role.Find({
+        let role = await Users_Role.Find({
             where: {
                 "users_roles.id": req.data.id
             },
@@ -206,7 +205,7 @@ module.exports = class AdminController extends Controller{
                 "users.username", "roles.name", "users_roles.*"
             ]
         })
-        await Role.Delete({
+        await Users_Role.Delete({
             where: {
                 id: req.data.id
             }
@@ -224,13 +223,13 @@ module.exports = class AdminController extends Controller{
      * @returns 
      */
     static async HandleUsersRoleAddingPost(req, res, next){
-        await Role.Create({
+        await Users_Role.Create({
             create: {
                 role_id: req.data.role,
                 user_id: req.data.user
             }
         })
-        let role = await Role.Find({
+        let role = await Users_Role.Find({
             where: {
                 "users_roles.user_id": req.data.user,
                 "users_roles.role_id": req.data.role
@@ -255,7 +254,7 @@ module.exports = class AdminController extends Controller{
      * @returns 
      */
     static async HandlePi(req, res, next){
-        let temps = await Temp.Select({
+        let temps = await Pi_Temp.Select({
             limit: 10,
             orderBy: 'ORDER BY id DESC'
         })
