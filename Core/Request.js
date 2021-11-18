@@ -9,10 +9,18 @@ module.exports = class Request{
         this.#req = req
     }
 
+    /**
+     * Gets the method of the request
+     * @returns {string}
+     */
     get method(){
         return this.#req.method
     }
 
+    /**
+     * builds a new url
+     * @returns {Object}
+     */
     get url(){
         let tUrl = new URL(`https://${process.env.HOST}:${process.env.PORT}${this.#req.url}`)
         return {
@@ -31,6 +39,10 @@ module.exports = class Request{
         }
     }
 
+    /**
+     * Gets all the cookies
+     * @returns {Object}
+     */
     get cookies(){
         if(!this.#req.headers.cookie) return {}
         let parsedCookies = {}

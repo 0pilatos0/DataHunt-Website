@@ -6,6 +6,7 @@ module.exports = class Profile_Picture extends Model {
     }
 
     /**
+     * returns the name of this models table
      * @returns {String}
      */
     static get tableName(){
@@ -13,6 +14,11 @@ module.exports = class Profile_Picture extends Model {
     }
 
     /**
+     * Finds a profile picture on the user id
+     * @param {Object} data
+     * @param {String} data.select
+     * @param {String} data.where
+     * @param {String} data.orderBy
      * @returns {Profile_PictureObject}
      */
     static async find({select, where, orderBy}){

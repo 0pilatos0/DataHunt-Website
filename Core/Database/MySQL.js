@@ -11,6 +11,11 @@ let con = mysql.createConnection({
 })
 
 module.exports = class MySQL{
+    /**
+     * connect to the database
+     * @param {String} database 
+     * @returns {void}
+     */
     static connect(database = null){
         if(database != null){
             con.config.database = database;
@@ -21,6 +26,12 @@ module.exports = class MySQL{
         });
     }
 
+    /**
+     * sends and runs the query
+     * @param {String} sql 
+     * @param {Array} values
+     * @returns {void}
+     */
     static query(sql, values){
         return new Promise((resolve, reject) => {
             con.query(sql, values, (err, result) => {

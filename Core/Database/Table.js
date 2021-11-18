@@ -6,6 +6,12 @@ module.exports = class Table{
 
     // }
 
+    /**
+     * creates a table with columns
+     * @param {String} name 
+     * @param {Object} columns 
+     * @returns {Void]}
+     */
     create(name, columns){
         let columnString = "id INT AUTO_INCREMENT PRIMARY KEY, ";
         Object.keys(columns).map(key => {
@@ -28,6 +34,10 @@ module.exports = class Table{
         MySQL.query(`CREATE TABLE IF NOT EXISTS ${name} (${columnString})`);
     }
 
+    /**
+     * drops a table
+     * @param {String} name 
+     */
     drop(name){
         MySQL.query(`DROP TABLE IF EXISTS ${name}`);
     }
