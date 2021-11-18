@@ -1,5 +1,9 @@
 export default class Modal{
-
+    /**
+     * Loads the modal template
+     * @param {String} path 
+     * @returns {File}
+     */
     static Load(path){
         return new Promise((resolve, reject) => {
             var xhr = new XMLHttpRequest();
@@ -17,6 +21,14 @@ export default class Modal{
         });
     }
 
+    /** 
+     * Creates a modal
+     * @param {String} title
+     * @param {String} body
+     * @param {JSON} requestData
+     * @param {String} confirm
+     * @param {String} requestLocation
+    */
     static Confirm(title, body, requestData, confirm, requestLocation){
         let data = this.Load("/js/Modals/ModalTemplate.html")
 
@@ -41,10 +53,6 @@ export default class Modal{
             document.getElementById("cancelModal").onclick = function () {
                 document.getElementById("popupModal").remove()
             };
-
         });
-
     }
-
-
 };
