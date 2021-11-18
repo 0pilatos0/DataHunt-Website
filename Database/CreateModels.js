@@ -9,7 +9,7 @@ async function run(){
     MySQL.connect(process.env.DB);
     let tables = await MySQL.query(`SHOW TABLES`);
     tables.map(async table => {
-        table = table.Tables_in_data;
+        table = table[`Tables_in_${process.env.DB}`];
         let tableName = firstCharToUpperPerWord(table);
         let customObject = `/**\r\n`;
         let customObjectName = `${pluralize.singular(tableName)}Object`

@@ -2,9 +2,11 @@ const fs = require('fs')
 
 module.exports = class Response{
     #res
+    #req
 
-    constructor(res) {
+    constructor(res, req) {
         this.#res = res;
+        this.#req = req;
     }
 
     send(data){
@@ -28,6 +30,8 @@ module.exports = class Response{
             html = html.replaceAll(`{{${key}}}`, value);
         })
         template = template.replace('{{body}}', html)
+        template = template.replace('{{feedback}}', this.#req.session.feedback?.join(""))
+        this.#req.session.feedback = [];
         this.#res.write(template);
     }
 

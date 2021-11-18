@@ -1,28 +1,28 @@
 const Model = require("../../Core/Database/Model");
 
-module.exports = class Profile_Picture extends Model {
-    static tableName = "profile_pictures";
+module.exports = class Friend extends Model {
+    static tableName = "friends";
 
     constructor(){
         super();
     }
 
     /**
-     * @returns {Profile_PictureObject}
+     * @returns {FriendObject}
      */
     static async find({select, where, orderBy}){
         return super.find({select, where, orderBy});
     }
 
     /**
-     * @returns {Profile_PictureObject}
+     * @returns {FriendObject}
      */
     static async findId({select, where, orderBy}){
         return super.findId({select, where, orderBy});
     }
 
     /**
-     * @returns {Array.<Profile_PictureObject>}
+     * @returns {Array.<FriendObject>}
      */
     static async select({select, where, orderBy, limit}){
         return super.select({select, where, orderBy, limit});
@@ -50,21 +50,21 @@ module.exports = class Profile_Picture extends Model {
     }
 
     /**
-     * @returns {Array.<Profile_PictureObject>}
+     * @returns {Array.<FriendObject>}
      */
     static async all(){
         return super.all();
     }
 
     /**
-     * @returns {Profile_PictureObject}
+     * @returns {FriendObject}
      */
     static async first(){
         return super.first();
     }
 
     /**
-     * @returns {Profile_PictureObject}
+     * @returns {FriendObject}
      */
     static async last(){
         return super.last();
@@ -72,10 +72,12 @@ module.exports = class Profile_Picture extends Model {
 }
 
 /**
- * @typedef {Object} Profile_PictureObject
+ * @typedef {Object} FriendObject
  * @property {number} id
  * @property {number} user_id
- * @property {string} image
+ * @property {number} sender_id
+ * @property {number} receiver_id
+ * @property {string} status
  * @property {Date} created_at
  * @property {Date} updated_at
  */

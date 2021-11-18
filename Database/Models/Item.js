@@ -1,28 +1,28 @@
 const Model = require("../../Core/Database/Model");
 
-module.exports = class Profile_Picture extends Model {
-    static tableName = "profile_pictures";
+module.exports = class Item extends Model {
+    static tableName = "items";
 
     constructor(){
         super();
     }
 
     /**
-     * @returns {Profile_PictureObject}
+     * @returns {ItemObject}
      */
     static async find({select, where, orderBy}){
         return super.find({select, where, orderBy});
     }
 
     /**
-     * @returns {Profile_PictureObject}
+     * @returns {ItemObject}
      */
     static async findId({select, where, orderBy}){
         return super.findId({select, where, orderBy});
     }
 
     /**
-     * @returns {Array.<Profile_PictureObject>}
+     * @returns {Array.<ItemObject>}
      */
     static async select({select, where, orderBy, limit}){
         return super.select({select, where, orderBy, limit});
@@ -50,21 +50,21 @@ module.exports = class Profile_Picture extends Model {
     }
 
     /**
-     * @returns {Array.<Profile_PictureObject>}
+     * @returns {Array.<ItemObject>}
      */
     static async all(){
         return super.all();
     }
 
     /**
-     * @returns {Profile_PictureObject}
+     * @returns {ItemObject}
      */
     static async first(){
         return super.first();
     }
 
     /**
-     * @returns {Profile_PictureObject}
+     * @returns {ItemObject}
      */
     static async last(){
         return super.last();
@@ -72,10 +72,15 @@ module.exports = class Profile_Picture extends Model {
 }
 
 /**
- * @typedef {Object} Profile_PictureObject
+ * @typedef {Object} ItemObject
  * @property {number} id
- * @property {number} user_id
- * @property {string} image
+ * @property {string} name
+ * @property {number} required_level
+ * @property {string} type
+ * @property {number} rarity
+ * @property {number} min_value
+ * @property {number} max_value
+ * @property {string} texture
  * @property {Date} created_at
  * @property {Date} updated_at
  */

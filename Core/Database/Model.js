@@ -1,6 +1,8 @@
 const MySQL = require("./MySQL")
 
 module.exports = class Model{
+    static tableName
+
     static async find({select, where, orderBy}){
         let data = await Model.select({select, where, orderBy, limit: 1});
         if(data.length > 0){
@@ -23,7 +25,7 @@ module.exports = class Model{
 
     static async select({select, where, orderBy, limit}){
         let whereData = parseWhere(where);
-        return await MySQL.query(`SELECT ${select || "*"} FROM ${this.tableName}${where != null ? `WHERE ${whereData.whereString}` : ""}${limit ? `LIMIT ${limit}` : ""}`, whereData.values);
+        return await MySQL.query(`SELECT ${select || "*"} FROM ${this.tableName}${where != null ? ` WHERE ${whereData.whereString}` : ""}${limit ? ` LIMIT ${limit}` : ""}`, whereData.values);
     }
 
     static async update({where, set}){
@@ -97,4 +99,5 @@ function parseCreate(create){
             valuesString += ", ";
         }
     });
+    return {createString, valuesString, values};
 }

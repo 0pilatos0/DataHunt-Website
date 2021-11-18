@@ -1,6 +1,6 @@
 const Seeder = require("../../Core/Database/Seeder");
 
-module.exports = class Profile_Pictures extends Seeder{
+module.exports = class Logintokens extends Seeder{
     constructor(){
         super();
     }
@@ -9,13 +9,13 @@ module.exports = class Profile_Pictures extends Seeder{
      * @returns {String}
      */
     static get tableName(){
-        return "profile_pictures";
+        return "logintokens";
     }
 
     /**
-     * @param {Object} data to seed table Profile_Pictures
+     * @param {Object} data to seed table Logintokens
 	 * @param {number} data.user_id User_Id
-	 * @param {string} data.image Image
+	 * @param {string} data.token Token
      */
     static async Seed(data){
         if(typeof data.user_id != "undefined"){
@@ -26,13 +26,13 @@ module.exports = class Profile_Pictures extends Seeder{
 		else {
 			data.user_id = Math.round(Math.random() * 255);
 		}
-		if(typeof data.image != "undefined"){
-			if(typeof data.image !== "string"){
-				throw new Error('image must be typeof string');
+		if(typeof data.token != "undefined"){
+			if(typeof data.token !== "string"){
+				throw new Error('token must be typeof string');
 			}
 		}
 		else {
-			data.image = "";
+			data.token = "";
 			const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split("");
 			for (let i = 0; i < 25; i++) {
 				data.name += chars[Math.round(Math.random() * chars.length)];

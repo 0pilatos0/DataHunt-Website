@@ -19,7 +19,7 @@ let sessions = {};
  */
 function requestListener(tReq, tRes){
     let req = new Request(tReq);
-    let res = new Response(tRes);
+    let res = new Response(tRes, req);
     if(requests[req.method.toLowerCase()] && !path.extname(req.url.pathname)){
         let saveOnQuit = function(){
             sessions[req.cookies[`${process.env.SESSIONID}SESSIONID`]] = req.session;
@@ -31,7 +31,10 @@ function requestListener(tReq, tRes){
             let session = Object.keys(sessions).find(session => session === req.cookies[cookie]);
             if(typeof session == 'undefined'){
                 let sessionID = randomString(100)
-                sessions[sessionID] = {}
+                sessions[sessionID] = {
+                    feedback: [],
+                }
+                req.session = sessions[sessionID];
                 res.createCookie(`${process.env.SESSIONID}SESSIONID`, sessionID)
             }
             else{
@@ -40,7 +43,10 @@ function requestListener(tReq, tRes){
         }
         else{
             let sessionID = randomString(100)
-            sessions[sessionID] = {}
+            sessions[sessionID] = {
+                feedback: [],
+            }
+            req.session = sessions[sessionID];
             res.createCookie(`${process.env.SESSIONID}SESSIONID`, sessionID)
         }
         if(req.method == "POST"){

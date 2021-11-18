@@ -1,5 +1,6 @@
 const http = require('http');
 const {requestListener, requests} = require('./RequestListener');
+const Router = require('./Router');
 
 module.exports = class WebServer{
     #http = http.createServer(requestListener);
@@ -27,21 +28,16 @@ module.exports = class WebServer{
     }
 
     use(path, object){
-        let type = object.constructor.name;
-        switch (type) {
-            case "Router":
-                Object.keys(object.requests).map(key => {
-                    object.requests[key].map(request => {
-                        requests[key].push({
-                            path: path + request.path,
-                            callback: request.callback,
-                            router: request.router
-                        });
+        if(object instanceof Router){
+            Object.keys(object.requests).map(key => {
+                object.requests[key].map(request => {
+                    requests[key].push({
+                        path: path + request.path,
+                        callback: request.callback,
+                        router: request.router
                     });
                 });
-                break;
-            default:
-                break;
+            });
         }
     }
 }

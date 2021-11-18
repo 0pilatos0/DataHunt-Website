@@ -1,28 +1,28 @@
 const Model = require("../../Core/Database/Model");
 
-module.exports = class Profile_Picture extends Model {
-    static tableName = "profile_pictures";
+module.exports = class Class extends Model {
+    static tableName = "class";
 
     constructor(){
         super();
     }
 
     /**
-     * @returns {Profile_PictureObject}
+     * @returns {ClassObject}
      */
     static async find({select, where, orderBy}){
         return super.find({select, where, orderBy});
     }
 
     /**
-     * @returns {Profile_PictureObject}
+     * @returns {ClassObject}
      */
     static async findId({select, where, orderBy}){
         return super.findId({select, where, orderBy});
     }
 
     /**
-     * @returns {Array.<Profile_PictureObject>}
+     * @returns {Array.<ClassObject>}
      */
     static async select({select, where, orderBy, limit}){
         return super.select({select, where, orderBy, limit});
@@ -50,21 +50,21 @@ module.exports = class Profile_Picture extends Model {
     }
 
     /**
-     * @returns {Array.<Profile_PictureObject>}
+     * @returns {Array.<ClassObject>}
      */
     static async all(){
         return super.all();
     }
 
     /**
-     * @returns {Profile_PictureObject}
+     * @returns {ClassObject}
      */
     static async first(){
         return super.first();
     }
 
     /**
-     * @returns {Profile_PictureObject}
+     * @returns {ClassObject}
      */
     static async last(){
         return super.last();
@@ -72,10 +72,12 @@ module.exports = class Profile_Picture extends Model {
 }
 
 /**
- * @typedef {Object} Profile_PictureObject
+ * @typedef {Object} ClassObject
  * @property {number} id
- * @property {number} user_id
- * @property {string} image
+ * @property {number} attack
+ * @property {number} health
+ * @property {number} speed
+ * @property {number} defense
  * @property {Date} created_at
  * @property {Date} updated_at
  */

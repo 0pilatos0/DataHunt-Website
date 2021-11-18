@@ -1,15 +1,10 @@
 const Model = require("../../Core/Database/Model");
 
 module.exports = class {{model}} extends Model {
+    static tableName = "{{table}}";
+
     constructor(){
         super();
-    }
-
-    /**
-     * @returns {String}
-     */
-    static get tableName(){
-        return "{{table}}";
     }
 
     /**

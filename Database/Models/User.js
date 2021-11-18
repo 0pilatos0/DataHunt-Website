@@ -1,15 +1,10 @@
 const Model = require("../../Core/Database/Model");
 
 module.exports = class User extends Model {
+    static tableName = "users";
+
     constructor(){
         super();
-    }
-
-    /**
-     * @returns {String}
-     */
-    static get tableName(){
-        return "users";
     }
 
     /**
@@ -79,7 +74,15 @@ module.exports = class User extends Model {
 /**
  * @typedef {Object} UserObject
  * @property {number} id
+ * @property {string} name
  * @property {string} username
+ * @property {string} email
+ * @property {string} password
+ * @property {number} enabled
+ * @property {string} resetpassword
+ * @property {string} verifytoken
+ * @property {number} verified
+ * @property {string} resettoken
  * @property {Date} created_at
  * @property {Date} updated_at
  */
