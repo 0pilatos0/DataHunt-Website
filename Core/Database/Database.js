@@ -1,6 +1,11 @@
 const MySQL = require("./MySQL")
-
 module.exports = class Database{
+
+    /**
+     * Creates database
+     * @param {string} name
+     * @returns {void}
+     */
     static create(name){
         MySQL.query(`DROP DATABASE IF EXISTS ${name}`)
         MySQL.query(`CREATE DATABASE IF NOT EXISTS ${name}`) // IF NOT EXISTS ${name}

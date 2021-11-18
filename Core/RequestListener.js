@@ -13,7 +13,7 @@ let requests = {
 let sessions = {};
 
 /**
- * 
+ * functie die de request verwerkt
  * @param {http.IncomingMessage} tReq 
  * @param {http.ServerResponse} tRes 
  */
@@ -94,6 +94,10 @@ function requestListener(tReq, tRes){
         res.error();
     }
 }
+
+/**
+ * looks for callbacks BASED on requests
+ */
 
 function findCorrectRequests(req, requests){
     let correctRequests = [];
