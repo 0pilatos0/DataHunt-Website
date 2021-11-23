@@ -9,6 +9,7 @@ const Helper = require('./Helper')
 const qs = require('querystring')
 const Router = require('./Router')
 const Role = require('../Models/Role')
+const Regex = require('./Regex')
 
 /**
  * @callback RequestCallback
@@ -114,6 +115,9 @@ module.exports = class WebServer{
                 })
                 tReq.on('end', async () => {
                     req.data = qs.parse(body)
+                    Object.keys(req.data).map(key => {
+                        req.data[key] = encodeChars(req.data[key])
+                    })
                     req.data.has = (name) => {
                         return Object.keys(req.data).includes(name)
                     }
@@ -212,6 +216,10 @@ module.exports = class WebServer{
         Object.assign(this.#gets, router.gets)
         Object.assign(this.#posts, router.posts)
     }
+}
+
+function encodeChars(str) {
+    return str.replace(/['"`<>\\]/g, '');
 }
 
 
