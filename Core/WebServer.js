@@ -4,11 +4,11 @@ const Request = require('./Request')
 const Response = require('./Response')
 require('dotenv').config()
 const fs = require('fs')
-const User = require('../Models/User')
+const User = require('../Database/Models/User')
 const Helper = require('./Helper')
 const qs = require('querystring')
 const Router = require('./Router')
-const User_Role = require('../Database/Models/User_Role')
+const User_Role = require('../Database/Models/Users_Role')
 
 /**
  * @callback RequestCallback

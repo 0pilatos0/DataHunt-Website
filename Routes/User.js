@@ -12,7 +12,7 @@ module.exports = class User extends Router{
 
         this.post('/profilePicture', UserController.HandleProfilePicturePost)
 
-        this.post('/changeAccount', UserController.HandleChangeAccountPost)
+        // this.post('/changeAccount', UserController.HandleChangeAccountPost)
 
         this.get('/deleteProfilePicture', UserController.HandleDeleteProfilePicture)
     }
