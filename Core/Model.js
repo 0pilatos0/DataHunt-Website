@@ -13,10 +13,7 @@ module.exports = class Model{
             where = whereData.where
             values = values.concat(whereData.values)
         }
-        if(typeof select != "undefined"){
-            if(select.length == 0) select = "*"
-        }
-        return MySQL.Query(`SELECT ${select || '*'} FROM ${this.table} ${joins ? joins.join(' ') : ''}${where ? ` WHERE ${where}` : ''}${orderBy ? ` ${orderBy.toUpperCase()}` : ''}${limit ? ` LIMIT ${limit}` : ''}`, values)
+        return MySQL.Query(`SELECT ${select ? select.join(", ") : '*'} FROM ${this.table} ${joins ? joins.join(' ') : ''}${where ? ` WHERE ${where}` : ''}${orderBy ? ` ${orderBy.toUpperCase()}` : ''}${limit ? ` LIMIT ${limit}` : ''}`, values)
     }
 
     static async Delete({where = {}}){

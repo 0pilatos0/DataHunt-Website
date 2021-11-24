@@ -8,7 +8,7 @@ const User = require('../Models/User')
 const Helper = require('./Helper')
 const qs = require('querystring')
 const Router = require('./Router')
-const Role = require('../Models/Role')
+const User_Role = require('../Database/Models/User_Role')
 
 /**
  * @callback RequestCallback
@@ -72,7 +72,7 @@ module.exports = class WebServer{
                         delete req.session.user
                     }
                 }
-                let roles = await Role.Select({
+                let roles = await User_Role.Select({
                     where: {
                         user_id: req.session.user.id
                     },

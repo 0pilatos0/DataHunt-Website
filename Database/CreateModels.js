@@ -30,7 +30,7 @@ async function run(){
             customObject += ` * @property {${parsedType}} ${column.Field}\r\n`;
         });
         customObject += ` */`;
-        fs.writeFileSync(`./Models/${pluralize.singular(tableName)}.js`, fs.readFileSync('Templates/ModelTemplate.txt', 'utf-8').replace(/{{table}}/g, table).replace(/{{model}}/g, pluralize.singular(tableName)).replace(/{{customObject}}/g, customObject).replace(/{{customObjectName}}/g, customObjectName));
+        fs.writeFileSync(`./Models/${pluralize.singular(tableName)}.js`, fs.readFileSync('./Templates/ModelTemplate.txt', 'utf-8').replace(/{{table}}/g, table).replace(/{{model}}/g, pluralize.singular(tableName)).replace(/{{customObject}}/g, customObject).replace(/{{customObjectName}}/g, customObjectName));
     });
 }
 
