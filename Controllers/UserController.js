@@ -1,12 +1,11 @@
 const Controller = require('../Core/Controller');
 const Regex = require('../Core/Regex');
 const Salter = require('../Core/Salter');
-const User = require('../Models/User');
 const Feedback = require('../Core/Feedback/Feedback');
 const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
 const Request = require('../Core/Request');
 const Response = require('../Core/Response');
-const ProfilePicture = require('../Models/ProfilePicture');
+const Profile_Picture = require('../Database/Models/Profile_Picture')
 
 module.exports = class UserController extends Controller{
     constructor() {
@@ -20,7 +19,7 @@ module.exports = class UserController extends Controller{
      * @returns 
      */
     static async HandleProfile(req, res, next){
-        let profilePicture = await ProfilePicture.Find({
+        let profilePicture = await Profile_Picture.Find({
             where: {
                 user_id: req.session.user.id
             }
@@ -52,13 +51,13 @@ module.exports = class UserController extends Controller{
             req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.ERROR, `You can't upload an empty profile picture`))
         }
         else{
-            let profilePictureID = await ProfilePicture.FindId({
+            let profilePictureID = await Profile_Picture.FindId({
                 where: {
                     user_id: req.session.user.id
                 }
             })
             if(profilePictureID == false){
-                await ProfilePicture.Create({
+                await Profile_Picture.Create({
                     create: {
                         user_id: req.session.user.id,
                         image: req.data.picture
@@ -68,7 +67,7 @@ module.exports = class UserController extends Controller{
                 req.session.feedback.push(Feedback.ShowFeedback(FeedbackEnum.SUCCESS, `You successfully uploaded your profile picture`))
             }
             else{
-                await ProfilePicture.Update({
+                await Profile_Picture.Update({
                     where: {
                         user_id: req.session.user.id
                     },
@@ -104,7 +103,7 @@ module.exports = class UserController extends Controller{
     static async HandleDeleteProfilePicture(req, res, next){
         if(req.session.user.profilePicture){
             delete req.session.user.profilePicture
-            await ProfilePicture.Delete({
+            await Profile_Picture.Delete({
                 where: {
                     user_id: req.session.user.id
                 }

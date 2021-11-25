@@ -3,14 +3,14 @@ const Request = require('../Core/Request');
 const Response = require('../Core/Response');
 const Regex = require('../Core/Regex');
 const Salter = require('../Core/Salter');
-const User = require('../Models/User');
+const User = require('../Database/Models/User')
 const Feedback = require('../Core/Feedback/Feedback');
 const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
 const Mailer = require('../Core/Mailer');
 const HTMLLoader = require('../Loaders/HTMLLoader');
 const Utils = require('../Core/Utils');
-const Role = require('../Models/Role');
-const ProfilePicture = require('../Models/ProfilePicture')
+const Users_Role = require('../Database/Models/Users_Role')
+const Profile_Picture = require('../Database/Models/Profile_Picture');
 
 module.exports = class AccountController extends Controller{
     constructor() {
@@ -193,7 +193,7 @@ module.exports = class AccountController extends Controller{
         else if(errors.length == 0){
             errors.push("Your username or password is incorrect")
         }
-        let roles = await Role.Select({
+        let roles = await Users_Role.Select({
             where: {
                 user_id: user.id
             },
@@ -206,7 +206,7 @@ module.exports = class AccountController extends Controller{
         roles.map(role => {
             parsedRoles.push(role.name)
         })
-        let profilePicture = await ProfilePicture.Find({
+        let profilePicture = await Profile_Picture.Find({
             where: {
                 user_id: user.id
             },
