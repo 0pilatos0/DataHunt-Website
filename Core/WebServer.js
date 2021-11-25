@@ -73,20 +73,22 @@ module.exports = class WebServer{
                         delete req.session.user
                     }
                 }
-                let roles = await User_Role.Select({
-                    where: {
-                        user_id: req.session.user.id
-                    },
-                    joins: [
-                        "INNER JOIN roles ON users_roles.role_id = roles.id"
-                    ],
-                    select: ["name"]
-                })
-                let parsedRoles = []
-                roles.map(role => {
-                    parsedRoles.push(role.name)
-                })
-                req.session.user.roles = parsedRoles
+                if(req.session.user){
+                    let roles = await User_Role.Select({
+                        where: {
+                            user_id: req.session.user.id
+                        },
+                        joins: [
+                            "INNER JOIN roles ON users_roles.role_id = roles.id"
+                        ],
+                        select: ["name"]
+                    })
+                    let parsedRoles = []
+                    roles.map(role => {
+                        parsedRoles.push(role.name)
+                    })
+                    req.session.user.roles = parsedRoles
+                }
             }
             if(req.Method == "GET"){
                 let handlers = getHandlers(this.#gets, req, res)
@@ -219,7 +221,7 @@ module.exports = class WebServer{
 }
 
 function encodeChars(str) {
-    return str.replace(/['"`<>\\]/g, '');
+    return str.replace(/['"`<>\\{}]/g, '');
 }
 
 
