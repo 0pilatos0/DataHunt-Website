@@ -9,7 +9,7 @@
         <div id="currentProfilePictureHolder">
             <img src="{{profilePicture}}" id="currentProfilePicture">
             <div id="currentProfilePictureColor"></div>
-            <a href="/profile/deleteProfilePicture" id="deleteProfilePicture"><i class="fa fa-trash" aria-hidden="true"></i></a>
+            <div id="deleteProfilePicture"><i class="fa fa-trash" aria-hidden="true"></i></div>
         </div>
     </div>
     <div>
@@ -91,6 +91,18 @@
         cropper = new Cropper(pictureOutput, {
             aspectRatio: 1 / 1
         })
+    }
+</script>
+
+<script type="module">
+    import Modal from '/js/Modals/Modal.js'
+
+    deleteProfilePicture.onclick = function(){
+        let titleText = "Delete profile picture";
+        let bodyText = `Are you sure you want to delete your profile picture?`
+        let confirm = '<button type="submit" class="btn btn-primary" id="modalConfirm">Confirm</button>'
+
+        Modal.Confirm(titleText, bodyText, {}, confirm, "/profile/deleteProfilePicture", "GET");
     }
 </script>
 
