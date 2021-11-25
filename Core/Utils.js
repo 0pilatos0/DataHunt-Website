@@ -10,4 +10,12 @@ module.exports = class Utils{
     static firstCharToUpperPerWord(word){
         return word.replace(/(^|\s|_)[a-z]/g, function(f){return f.toUpperCase();});
     }
+
+    static randomId(){
+        let id = "";
+        let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        for( var i=0; i < 32; i++ )
+            id += chars.charAt(Math.floor(Math.random() * chars.length));
+        return id;
+    }
 }
