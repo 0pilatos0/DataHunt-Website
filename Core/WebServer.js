@@ -58,36 +58,38 @@ module.exports = class WebServer{
                 req.session = this.#sessions[sessionID] 
             }
             //#endregion
-            if(!req.session.feedback) req.session.feedback = []
-            if(req.session.user){
-                let user = await User.Find({
-                    where:{
-                        username: req.session.user.username
-                    }
-                })
-                if(user == false){
-                    delete req.session.user
-                }
-                else{
-                    if(!user.verified || !user.enabled){
+            if(req.session){
+                if(!req.session.feedback) req.session.feedback = []
+                if(req.session.user){
+                    let user = await User.Find({
+                        where:{
+                            username: req.session.user.username
+                        }
+                    })
+                    if(user == false){
                         delete req.session.user
                     }
-                }
-                if(req.session.user){
-                    let roles = await User_Role.Select({
-                        where: {
-                            user_id: req.session.user.id
-                        },
-                        joins: [
-                            "INNER JOIN roles ON users_roles.role_id = roles.id"
-                        ],
-                        select: ["name"]
-                    })
-                    let parsedRoles = []
-                    roles.map(role => {
-                        parsedRoles.push(role.name)
-                    })
-                    req.session.user.roles = parsedRoles
+                    else{
+                        if(!user.verified || !user.enabled){
+                            delete req.session.user
+                        }
+                    }
+                    if(req.session.user){
+                        let roles = await User_Role.Select({
+                            where: {
+                                user_id: req.session.user.id
+                            },
+                            joins: [
+                                "INNER JOIN roles ON users_roles.role_id = roles.id"
+                            ],
+                            select: ["name"]
+                        })
+                        let parsedRoles = []
+                        roles.map(role => {
+                            parsedRoles.push(role.name)
+                        })
+                        req.session.user.roles = parsedRoles
+                    }
                 }
             }
             if(req.Method == "GET"){
