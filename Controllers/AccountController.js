@@ -86,7 +86,7 @@ module.exports = class AccountController extends Controller{
         }
         if(req.data.email != ""){
             if(!req.data.email.match(Regex.Email)){
-                errors.push(`Email must contain an '@' and must end on an extension`)
+                errors.push(`Email must contain an '@' and must end on an extension for example @datahunt.nl`)
             }
         }
         else{
@@ -186,12 +186,12 @@ module.exports = class AccountController extends Controller{
             }
             if(errors.length == 0){
                 if(!Salter.VerifyPassword(req.data.password, user.password)){
-                    errors.push("Your username or password is incorrect")
+                    errors.push("Your email or password is incorrect")
                 }
             }
         }
         else if(errors.length == 0){
-            errors.push("Your username or password is incorrect")
+            errors.push("Your email or password is incorrect")
         }
         let roles = await Users_Role.Select({
             where: {
@@ -423,7 +423,7 @@ module.exports = class AccountController extends Controller{
         }
         else{
             if(!req.data.email.match(Regex.Email)){
-                errors.push(`Email must contain an '@' and must end on an extension`)
+                errors.push(`Email must contain an '@' and must end on an extension for example @datahunt.nl`)
             }
         }
         if(errors.length == 0){
