@@ -308,6 +308,25 @@ embed{
 
 #profileHolder{
     position: relative;
+    margin: 0px auto 0 auto;
+    width: 800px;
+    max-width: 800px;
+    border: floralwhite solid 0px;
+    text-shadow: 1px 1px 1px black, 0 0 3px var(--accent), 0 0 5px var(--extra);
+    transform: translate(0, 10%);
+}
+
+#currentProfilePictureHolderParent, #profilePictureFormHolderParent {
+    width: fit-content;
+}
+
+#profileHolder div {
+    margin: auto;
+}
+
+.foregroundBackground {
+    padding: 1% 1% 1% 1%;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .currentPage{
