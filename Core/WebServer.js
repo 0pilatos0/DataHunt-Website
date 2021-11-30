@@ -119,9 +119,24 @@ module.exports = class WebServer{
                 })
                 tReq.on('end', async () => {
                     req.data = qs.parse(body)
-                    Object.keys(req.data).map(key => {
-                        req.data[key] = encodeChars(req.data[key])
-                    })
+                    let replaceData = function(data){
+                        if(typeof data !== "undefined"){
+                            switch (typeof data) {
+                                case "string":
+                                    data = data.replace(/['"`<>\\{}]/g, '')
+                                    break;
+                                case "object":
+                                    Object.values(data).map(value => {
+                                        data[Object.keys(data)[Object.values(data).indexOf(value)]] = replaceData(value)
+                                    })
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        return data
+                    }
+                    req.data = replaceData(req.data)
                     req.data.has = (name) => {
                         return Object.keys(req.data).includes(name)
                     }
@@ -221,11 +236,6 @@ module.exports = class WebServer{
         Object.assign(this.#posts, router.posts)
     }
 }
-
-function encodeChars(str) {
-    return str.replace(/['"`<>\\{}]/g, '');
-}
-
 
 function getHandlers(responses, req, res){
     let splittedUrl = req.Url.pathname.substr(1, req.Url.pathname.length).split('/')
