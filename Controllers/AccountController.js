@@ -86,7 +86,7 @@ module.exports = class AccountController extends Controller{
         }
         if(req.data.email != ""){
             if(!req.data.email.match(Regex.Email)){
-                errors.push(`Email must contain an '@'`)
+                errors.push(`Email must contain an '@' and must end on an extension`)
             }
         }
         else{
@@ -423,7 +423,7 @@ module.exports = class AccountController extends Controller{
         }
         else{
             if(!req.data.email.match(Regex.Email)){
-                errors.push(`Email must contain an '@'`)
+                errors.push(`Email must contain an '@' and must end on an extension`)
             }
         }
         if(errors.length == 0){
