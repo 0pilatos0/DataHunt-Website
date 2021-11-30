@@ -1,16 +1,16 @@
 const Controller = require('../Core/Controller');
-const User = require('../Models/User');
+const User = require('../Database/Models/User');
 const Feedback = require('../Core/Feedback/Feedback');
 const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
 const Request = require('../Core/Request');
 const Response = require('../Core/Response');
-const fs = require('fs');
 const path = require('path');
-const File = require('../Models/File');
-const Role = require('../Models/Role');
-const Roles = require('../Models/Roles');
-const Temp = require('../Models/Temp')
-const Fetch = require('../Core/Fetch')
+const File = require('../Database/Models/File');
+const Users_Role = require('../Database/Models/Users_Role');
+const Role = require('../Database/Models/Role');
+const Pi_Temp = require('../Database/Models/Pi_Temp')
+const Fetch = require('../Core/Fetch');
+const Utils = require('../Core/Utils');
 
 module.exports = class AdminController extends Controller{
     constructor() {
@@ -107,17 +107,18 @@ module.exports = class AdminController extends Controller{
         let users = await User.Select({
             limit: `${maxUsers} OFFSET 0`
         })
-        let allRoles = await Roles.Select({
+        let allRoles = await Role.Select({
             select: ["name", "id"]
         })
         let body = ''
         let script = '<script>'
         let doneUsers = 0
         users.map(async user => {
+            let randomId = Utils.randomId()
             let dataString = ""
             dataString += `<tr>`
             dataString += `<td>${user.username}</td>`
-            let assignedRoles = await Role.Select({
+            let assignedRoles = await Users_Role.Select({
                 joins: [
                     "INNER JOIN roles ON users_roles.role_id = roles.id"
                 ],
@@ -132,7 +133,7 @@ module.exports = class AdminController extends Controller{
                 parsedAssignedRoles.push(`<div><p>${role.name}</p><button id="${role.id}" class="delete-button">x</button></div>`)
             })
             dataString += `<td>${parsedAssignedRoles.join('')}</td>`
-            dataString += `<td><select id="${user.username}-select"><option value="">Select one</option>`
+            dataString += `<td><select id="${randomId}-select"><option value="">Select one</option>`
             allRoles.map(role => {
                 if(!assignedRoles.some(r => r.name == role.name)){
                     dataString += `<option value="${role.id}">${role.name}</option>`
@@ -141,15 +142,15 @@ module.exports = class AdminController extends Controller{
             dataString += `</select></td>`
             dataString += '</tr>'
             body += dataString
-            body += `<form method="POST" action="/admin/users/addRole" id="${user.username}-form"><input type="hidden" name="role" id="${user.username}-role"><input type="hidden" value="${user.id}" name="user"></form>`
+            body += `<form method="POST" action="/admin/users/addRole" id="${randomId}-form"><input type="hidden" name="role" id="${randomId}-role"><input type="hidden" value="${user.id}" name="user"></form>`
             script += `
-                let ${user.username}select = document.getElementById('${user.username}-select')
-                let ${user.username}form = document.getElementById('${user.username}-form')
-                let ${user.username}role = document.getElementById('${user.username}-role')
-                ${user.username}select.addEventListener('change', () => {
-                    //window.location.href = window.location.href + '/addRole?id=' + ${user.username}select.value + '&user=${user.id}'
-                    ${user.username}role.value = ${user.username}select.value
-                    ${user.username}form.submit()
+                let ${randomId}select = document.getElementById('${randomId}-select')
+                let ${randomId}form = document.getElementById('${randomId}-form')
+                let ${randomId}role = document.getElementById('${randomId}-role')
+                ${randomId}select.addEventListener('change', () => {
+                    //window.location.href = window.location.href + '/addRole?id=' + ${randomId}select.value + '&user=${user.id}'
+                    ${randomId}role.value = ${randomId}select.value
+                    ${randomId}form.submit()
                 })
             `
             doneUsers++
@@ -159,7 +160,6 @@ module.exports = class AdminController extends Controller{
                 import Modal from '/js/Modals/Modal.js'
         
         let buttonArray = document.getElementsByClassName("delete-button");
-                console.log(buttonArray);
         Array.from(buttonArray).forEach(button => {
             button.onclick = function(){
                 let name = button.parentElement.parentElement.parentElement.firstChild.innerHTML;
@@ -194,7 +194,7 @@ module.exports = class AdminController extends Controller{
      */
     static async HandleUsersRoleDeletionPost(req, res, next){
         console.log(req.data);
-        let role = await Role.Find({
+        let role = await Users_Role.Find({
             where: {
                 "users_roles.id": req.data.id
             },
@@ -206,7 +206,7 @@ module.exports = class AdminController extends Controller{
                 "users.username", "roles.name", "users_roles.*"
             ]
         })
-        await Role.Delete({
+        await Users_Role.Delete({
             where: {
                 id: req.data.id
             }
@@ -224,13 +224,13 @@ module.exports = class AdminController extends Controller{
      * @returns 
      */
     static async HandleUsersRoleAddingPost(req, res, next){
-        await Role.Create({
+        await Users_Role.Create({
             create: {
                 role_id: req.data.role,
                 user_id: req.data.user
             }
         })
-        let role = await Role.Find({
+        let role = await Users_Role.Find({
             where: {
                 "users_roles.user_id": req.data.user,
                 "users_roles.role_id": req.data.role
@@ -255,7 +255,7 @@ module.exports = class AdminController extends Controller{
      * @returns 
      */
     static async HandlePi(req, res, next){
-        let temps = await Temp.Select({
+        let temps = await Pi_Temp.Select({
             limit: 10,
             orderBy: 'ORDER BY id DESC'
         })

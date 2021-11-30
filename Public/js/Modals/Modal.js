@@ -17,7 +17,7 @@ export default class Modal{
         });
     }
 
-    static Confirm(title, body, requestData, confirm, requestLocation){
+    static Confirm(title, body, requestData, confirm, requestLocation, method = "POST"){
         let data = this.Load("/js/Modals/ModalTemplate.html")
 
         data.then((data) =>{
@@ -25,6 +25,7 @@ export default class Modal{
             data = data.replace("{{LOCATION}}", requestLocation)
             data = data.replace("{{BODY}}", body)
             data = data.replace("{{CONFIRM}}", confirm)
+            data = data.replace("{{METHOD}}", method)
 
             let post = "";
 
@@ -45,6 +46,4 @@ export default class Modal{
         });
 
     }
-
-
 };

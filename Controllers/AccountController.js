@@ -3,14 +3,14 @@ const Request = require('../Core/Request');
 const Response = require('../Core/Response');
 const Regex = require('../Core/Regex');
 const Salter = require('../Core/Salter');
-const User = require('../Models/User');
+const User = require('../Database/Models/User')
 const Feedback = require('../Core/Feedback/Feedback');
 const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
 const Mailer = require('../Core/Mailer');
 const HTMLLoader = require('../Loaders/HTMLLoader');
 const Utils = require('../Core/Utils');
-const Role = require('../Models/Role');
-const ProfilePicture = require('../Models/ProfilePicture')
+const Users_Role = require('../Database/Models/Users_Role')
+const Profile_Picture = require('../Database/Models/Profile_Picture');
 
 module.exports = class AccountController extends Controller{
     constructor() {
@@ -86,7 +86,7 @@ module.exports = class AccountController extends Controller{
         }
         if(req.data.email != ""){
             if(!req.data.email.match(Regex.Email)){
-                errors.push(`Email must contain an '@'`)
+                errors.push(`Email must contain an '@' and must end on an extension for example @datahunt.nl`)
             }
         }
         else{
@@ -186,14 +186,14 @@ module.exports = class AccountController extends Controller{
             }
             if(errors.length == 0){
                 if(!Salter.VerifyPassword(req.data.password, user.password)){
-                    errors.push("Your username or password is incorrect")
+                    errors.push("Your email or password is incorrect")
                 }
             }
         }
         else if(errors.length == 0){
-            errors.push("Your username or password is incorrect")
+            errors.push("Your email or password is incorrect")
         }
-        let roles = await Role.Select({
+        let roles = await Users_Role.Select({
             where: {
                 user_id: user.id
             },
@@ -206,7 +206,7 @@ module.exports = class AccountController extends Controller{
         roles.map(role => {
             parsedRoles.push(role.name)
         })
-        let profilePicture = await ProfilePicture.Find({
+        let profilePicture = await Profile_Picture.Find({
             where: {
                 user_id: user.id
             },
@@ -334,7 +334,7 @@ module.exports = class AccountController extends Controller{
      */
     static async HandlePasswordResetPost(req, res, next){
         const passwordMessage = 'must contain 1 uppercase, 1 lowercase, 1 number and 1 special character'
-        errors = []
+        let errors = []
         let success = []
         if(req.data.password != ''){
             if(!Regex.Password.test(req.data.password)){
@@ -423,7 +423,7 @@ module.exports = class AccountController extends Controller{
         }
         else{
             if(!req.data.email.match(Regex.Email)){
-                errors.push(`Email must contain an '@'`)
+                errors.push(`Email must contain an '@' and must end on an extension for example @datahunt.nl`)
             }
         }
         if(errors.length == 0){
@@ -445,7 +445,7 @@ module.exports = class AccountController extends Controller{
                             }
                         })
                         let htmlData = HTMLLoader.Read("./Mail/resetPasswordMail.html").html
-                        htmlData = htmlData.replace('{{url}}', `http://${process.env.HOST}:${process.env.PORT}/resetpassword?token=${token}`)
+                        htmlData = htmlData.replace('{{url}}', `http://${process.env.HOST}${process.env.PORT != 80 && process.env.PORT != 8080 ? `:${process.env.PORT}` : ""}/resetpassword?token=${token}`)
                         htmlData = htmlData.replace('{{username}}', user.username)
                         let mailState = await Mailer.SendMail({
                             to: user.email,

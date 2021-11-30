@@ -1,5 +1,4 @@
 const Controller = require('../Core/Controller');
-const User = require('../Models/User');
 const Feedback = require('../Core/Feedback/Feedback');
 const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
 const Request = require('../Core/Request');

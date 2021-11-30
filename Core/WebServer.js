@@ -4,11 +4,12 @@ const Request = require('./Request')
 const Response = require('./Response')
 require('dotenv').config()
 const fs = require('fs')
-const User = require('../Models/User')
+const User = require('../Database/Models/User')
 const Helper = require('./Helper')
 const qs = require('querystring')
 const Router = require('./Router')
-const Role = require('../Models/Role')
+const Regex = require('./Regex')
+const User_Role = require('../Database/Models/Users_Role')
 
 /**
  * @callback RequestCallback
@@ -44,7 +45,9 @@ module.exports = class WebServer{
                     req.session = this.#sessions[sessionID]
                 }
                 else{
+                    sessionID = Helper.RandomString(100)
                     this.#sessions[sessionID] = {}
+                    res.CreateCookie(process.env.SESSIONCOOKIENAME, sessionID)
                     req.session = this.#sessions[sessionID] 
                 }
             }
@@ -55,35 +58,39 @@ module.exports = class WebServer{
                 req.session = this.#sessions[sessionID] 
             }
             //#endregion
-            if(!req.session.feedback) req.session.feedback = []
-            if(req.session.user){
-                let user = await User.Find({
-                    where:{
-                        username: req.session.user.username
-                    }
-                })
-                if(user == false){
-                    delete req.session.user
-                }
-                else{
-                    if(!user.verified || !user.enabled){
+            if(req.session){
+                if(!req.session.feedback) req.session.feedback = []
+                if(req.session.user){
+                    let user = await User.Find({
+                        where:{
+                            username: req.session.user.username
+                        }
+                    })
+                    if(user == false){
                         delete req.session.user
                     }
+                    else{
+                        if(!user.verified || !user.enabled){
+                            delete req.session.user
+                        }
+                    }
+                    if(req.session.user){
+                        let roles = await User_Role.Select({
+                            where: {
+                                user_id: req.session.user.id
+                            },
+                            joins: [
+                                "INNER JOIN roles ON users_roles.role_id = roles.id"
+                            ],
+                            select: ["name"]
+                        })
+                        let parsedRoles = []
+                        roles.map(role => {
+                            parsedRoles.push(role.name)
+                        })
+                        req.session.user.roles = parsedRoles
+                    }
                 }
-                let roles = await Role.Select({
-                    where: {
-                        user_id: req.session.user.id
-                    },
-                    joins: [
-                        "INNER JOIN roles ON users_roles.role_id = roles.id"
-                    ],
-                    select: ["name"]
-                })
-                let parsedRoles = []
-                roles.map(role => {
-                    parsedRoles.push(role.name)
-                })
-                req.session.user.roles = parsedRoles
             }
             if(req.Method == "GET"){
                 let handlers = getHandlers(this.#gets, req, res)
@@ -112,6 +119,24 @@ module.exports = class WebServer{
                 })
                 tReq.on('end', async () => {
                     req.data = qs.parse(body)
+                    let replaceData = function(data){
+                        if(typeof data !== "undefined"){
+                            switch (typeof data) {
+                                case "string":
+                                    data = data.replace(/['"`<>\\{}]/g, '')
+                                    break;
+                                case "object":
+                                    Object.values(data).map(value => {
+                                        data[Object.keys(data)[Object.values(data).indexOf(value)]] = replaceData(value)
+                                    })
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        return data
+                    }
+                    req.data = replaceData(req.data)
                     req.data.has = (name) => {
                         return Object.keys(req.data).includes(name)
                     }
@@ -211,7 +236,6 @@ module.exports = class WebServer{
         Object.assign(this.#posts, router.posts)
     }
 }
-
 
 function getHandlers(responses, req, res){
     let splittedUrl = req.Url.pathname.substr(1, req.Url.pathname.length).split('/')

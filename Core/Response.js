@@ -5,7 +5,6 @@ const fs = require('fs')
 const Feedback = require('../Core/Feedback/Feedback');
 const FeedbackEnum = require('../Core/Feedback/FeedbackEnum');
 const Utils = require('./Utils');
-const ProfilePicture = require('../Models/ProfilePicture')
 
 module.exports = class Response{
     #res
