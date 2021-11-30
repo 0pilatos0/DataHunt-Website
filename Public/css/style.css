@@ -77,6 +77,7 @@ button:hover{
     image-rendering: pixelated;
     height: 10rem;
     max-height: 10rem;
+    margin: auto;
 }
 
 #pictureOutputHolder{
@@ -288,6 +289,7 @@ embed{
     position: relative;
     height: 10rem;
     width: 10rem;
+    margin: auto;
 }
 
 #currentProfilePictureColor{
@@ -318,9 +320,6 @@ embed{
 
 #currentProfilePictureHolderParent, #profilePictureFormHolderParent {
     width: fit-content;
-}
-
-#profileHolder div {
     margin: auto;
 }
 
@@ -427,7 +426,7 @@ input[type="file"] {
 }
 
 .centerText {
-    position: absolute;
+    position: relative;
     left: 50%;
     transform: translatex(-50%);
     z-index: 10;
