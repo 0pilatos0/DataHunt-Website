@@ -313,7 +313,7 @@ embed{
     max-width: 800px;
     border: floralwhite solid 0px;
     text-shadow: 1px 1px 1px black, 0 0 3px var(--accent), 0 0 5px var(--extra);
-    transform: translate(0, 10%);
+    transform: translate(0, 20px);
 }
 
 #currentProfilePictureHolderParent, #profilePictureFormHolderParent {
@@ -430,8 +430,31 @@ input[type="file"] {
     position: absolute;
     left: 50%;
     transform: translatex(-50%);
+    z-index: 10;
 }
 
 #upload {
     margin-top: 10px;
+}
+
+#picture {
+    z-index: 100;
+}
+
+@media screen and (max-width: 800px) {
+    #profileHolder{
+        width: 100%;
+    }
+    body {
+        width: 100vw;
+    }
+}
+
+#profileHolder {
+    height: calc(100vh - 2.5rem - 1.5rem - 1.5rem - 40px);
+}
+
+#pictureSubmit {
+    transform: translatex(100%);
+    position: absolute;
 }
