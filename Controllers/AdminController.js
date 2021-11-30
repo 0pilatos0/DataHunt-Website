@@ -130,7 +130,7 @@ module.exports = class AdminController extends Controller{
             let parsedAssignedRoles = []
             assignedRoles.map(role => {
 
-                parsedAssignedRoles.push(`<div><p>${role.name}</p><button id="${role.id}" class="delete-button">x</button></div>`)
+                parsedAssignedRoles.push(`<div style='display:flex;'><p style='margin-bottom:0px;margin-right:1rem'>${role.name}</p><button id="${role.id}" class="delete-button">x</button></div>`)
             })
             dataString += `<td>${parsedAssignedRoles.join('')}</td>`
             dataString += `<td><select id="${randomId}-select"><option value="">Select one</option>`
