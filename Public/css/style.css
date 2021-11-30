@@ -404,3 +404,34 @@ form div{
         transform: rotate(360deg);
     }
 }
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.custom-pdf-upload {
+    padding-left: 2px;
+    padding-right: 2px;
+    width: 200px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    text-align: center;
+    float: right;
+}
+
+.centerText {
+    position: absolute;
+    left: 50%;
+    transform: translatex(-50%);
+}
+
+#upload {
+    margin-top: 10px;
+}

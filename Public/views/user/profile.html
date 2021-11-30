@@ -17,11 +17,12 @@
             <div>
                 <h1>{{action}} profile picture:</h1>
             </div>
-            <div>
-                <label for="name">Picture:</label>
+            <label class="custom-file-upload centerText">
                 <input id="pictureInput" type="file" accept="image/jpeg, image/png">
-                <input id="picture" type="hidden" name="picture">
-            </div>
+                Upload picture:
+                <i class="fa fa-cloud-upload"></i>
+            </label>
+            <input id="picture" type="hidden" name="picture">
             <div>
                 <div id="pictureOutputHolder"></div>
             </div>
