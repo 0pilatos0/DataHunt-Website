@@ -314,6 +314,7 @@ embed{
     border: floralwhite solid 0px;
     text-shadow: 1px 1px 1px black, 0 0 3px var(--accent), 0 0 5px var(--extra);
     transform: translate(0, 20px);
+    height: calc(100vh - 2.5rem - 1.5rem - 1.5rem - 40px);
 }
 
 #currentProfilePictureHolderParent, #profilePictureFormHolderParent {
@@ -448,10 +449,6 @@ input[type="file"] {
     body {
         width: 100vw;
     }
-}
-
-#profileHolder {
-    height: calc(100vh - 2.5rem - 1.5rem - 1.5rem - 40px);
 }
 
 #pictureSubmit {
