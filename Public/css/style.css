@@ -77,6 +77,7 @@ button:hover{
     image-rendering: pixelated;
     height: 10rem;
     max-height: 10rem;
+    margin: auto;
 }
 
 #pictureOutputHolder{
@@ -288,6 +289,7 @@ embed{
     position: relative;
     height: 10rem;
     width: 10rem;
+    margin: auto;
 }
 
 #currentProfilePictureColor{
@@ -314,13 +316,11 @@ embed{
     border: floralwhite solid 0px;
     text-shadow: 1px 1px 1px black, 0 0 3px var(--accent), 0 0 5px var(--extra);
     transform: translate(0, 20px);
+    height: calc(100vh - 2.5rem - 1.5rem - 1.5rem - 40px);
 }
 
 #currentProfilePictureHolderParent, #profilePictureFormHolderParent {
     width: fit-content;
-}
-
-#profileHolder div {
     margin: auto;
 }
 
@@ -427,7 +427,7 @@ input[type="file"] {
 }
 
 .centerText {
-    position: absolute;
+    position: relative;
     left: 50%;
     transform: translatex(-50%);
     z-index: 10;
@@ -448,10 +448,6 @@ input[type="file"] {
     body {
         width: 100vw;
     }
-}
-
-#profileHolder {
-    height: calc(100vh - 2.5rem - 1.5rem - 1.5rem - 40px);
 }
 
 #pictureSubmit {

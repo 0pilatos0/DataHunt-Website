@@ -17,17 +17,17 @@
             <div>
                 <h1>{{action}} profile picture:</h1>
             </div>
-            <label class="custom-file-upload centerText">
-                <input id="pictureInput" type="file" accept="image/jpeg, image/png">
-                Upload picture:
-                <i class="fa fa-cloud-upload"></i>
-            </label>
-            <input id="picture" type="hidden" name="picture">
             <div>
-                <div id="pictureOutputHolder"></div>
+                <label class="custom-file-upload centerText" style="margin-bottom: 1rem;">
+                    <input id="pictureInput" type="file" accept="image/jpeg, image/png">
+                    Upload picture:
+                    <i class="fa fa-cloud-upload"></i>
+                </label>
+                <input id="picture" type="hidden" name="picture">
             </div>
+            <div id="pictureOutputHolder"></div>
             <div>
-                <button style="display: none" id="pictureSubmit" type="submit">{{action}} picture</button>
+                <button style="display: none; margin-top: 1rem;" id="pictureSubmit" type="submit">{{action}} picture</button>
             </div>
         </form>
     </div>
