@@ -53,7 +53,7 @@ module.exports = class UserController extends Controller{
         }
         else{
             let size = Buffer.from(req.data.picture.substr(23), 'base64').byteLength
-            if(size <= 256*256){
+            if(size <= 256*256*24){
                 let profilePictureID = await Profile_Picture.FindId({
                     where: {
                         user_id: req.session.user.id
